@@ -65,6 +65,7 @@ dependencies {
 
     runtime "org.grails.plugins:asset-pipeline"
 
+    testCompile "org.grails.plugins:hibernate"
     testCompile "org.grails:grails-plugin-testing"
     testCompile "org.grails.plugins:geb"
 
