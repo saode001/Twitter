@@ -1,4 +1,4 @@
-package twtr
+package twitter
 
 class Account {
     String handle

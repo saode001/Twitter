@@ -1,4 +1,4 @@
-package twtr
+package twitter
 
 import grails.test.mixin.TestFor
 import spock.lang.Specification
@@ -8,12 +8,6 @@ import spock.lang.Specification
  */
 @TestFor(Message)
 class MessageSpec extends Specification {
-    def startingMessageCount
-
-    def setup() {
-        startingMessageCount = Message.count()
-    }
-
     def 'Create new Message with a valid account'() {
         given:
         def user = new Account(handle: 'Kelly',email: 'schra435@umn.edu',password: 'Test12345',name: 'Kelly Schrader')
@@ -25,8 +19,6 @@ class MessageSpec extends Specification {
         then:
         message.id
         !message.hasErrors()
-        Message.get(message.id)
-        Message.count() == startingMessageCount + 1
     }
 
     def 'fails to save when required fields are missing'() {
@@ -41,10 +33,9 @@ class MessageSpec extends Specification {
         !message.id
         message.hasErrors()
         message.errors.getFieldError('account')
-        Message.count() == startingMessageCount
     }
 
-    def 'fails to save with bad mssage text' () {
+    def 'test message constrains' () {
         given:
         def user = new Account(handle: 'Kelly',email: 'schra435@umn.edu',password: 'Test12345',name: 'Kelly Schrader')
         def message = new Message(messageText: messageText, account: user)
@@ -53,14 +44,12 @@ class MessageSpec extends Specification {
         message.save()
 
         then:
-        message.hasErrors()
-        !message.id
-        Message.count() == startingMessageCount
+        message.errors.errorCount == expectedResults
 
         where:
-        description                     |   messageText
-        'Null message'                  |   null
-        'Blank message'                 |   ''
-        'Message over 40 characters'    |   '1'*41
+        description                     |   messageText                                       |   expectedResults
+        'Valid message'                 |   'This is a test message'                          |   0
+        'Blank message'                 |   ''                                                |   1
+        'Message over 40 characters'    |   'This is a message that is over 40 characters'    |   1
     }
 }

@@ -1,4 +1,4 @@
-package twtr
+package twitter
 
 class Message {
     String messageText

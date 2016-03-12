@@ -2,7 +2,7 @@
 grails:
     profile: web
     codegen:
-        defaultPackage: twtr
+        defaultPackage: twitter
 info:
     app:
         name: '@info.app.name@'

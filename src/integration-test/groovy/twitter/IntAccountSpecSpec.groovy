@@ -1,4 +1,4 @@
-package twtr
+package twitter
 
 
 import grails.test.mixin.integration.Integration
@@ -8,12 +8,6 @@ import spock.lang.*
 @Integration
 @Rollback
 class IntAccountSpec extends Specification {
-
-    def startingAccounts
-
-    def setup() {
-        startingAccounts = Account.count()
-    }
 
     def 'create new account' () {
         setup:
@@ -38,8 +32,7 @@ class IntAccountSpec extends Specification {
         then:
         account.errors.errorCount == 0
         dupAccount.errors.errorCount == 1
-        dupAccount.errors.getFieldError('email')
-        Account.count() == startingAccounts + 1
+
     }
 
     def 'create account with same handle should fail' () {
@@ -54,8 +47,7 @@ class IntAccountSpec extends Specification {
         then:
         account.errors.errorCount == 0
         dupAccount.errors.errorCount == 1
-        dupAccount.errors.getFieldError('handle')
-        Account.count() == startingAccounts + 1
+
     }
 
     def 'updating user to have same handle and email should fail' () {
@@ -73,9 +65,6 @@ class IntAccountSpec extends Specification {
         then:
         account.errors.errorCount == 0
         dupAccount.errors.errorCount == 2
-        dupAccount.errors.getFieldError('email')
-        dupAccount.errors.getFieldError('handle')
-        Account.count() == startingAccounts + 2
     }
 
     def 'account can have mulitple followers' () {
@@ -96,14 +85,17 @@ class IntAccountSpec extends Specification {
         account.addToFollower(followAccount3)
         account.save()
 
-        and:
-        def fetchedAccount = Account.get(account.id)
 
         then:
-        fetchedAccount.follower.size() == 3
-        fetchedAccount.follower.find { it.id == followAccount1.id }
-        fetchedAccount.follower.find { it.id == followAccount2.id }
-        fetchedAccount.follower.find { it.id == followAccount3.id }
+        account.errors.errorCount == 0
+        followAccount1.errors.errorCount == 0
+        followAccount2.errors.errorCount == 0
+        followAccount3.errors.errorCount == 0
+        account.getFollower().size() == 3
+        followAccount1.getFollowing().size() == 1
+        followAccount2.getFollowing().size() == 1
+        followAccount3.getFollowing().size() == 1
+
     }
 
     def 'Two accounts can follow each other'() {
@@ -122,20 +114,12 @@ class IntAccountSpec extends Specification {
         followAccount1.addToFollower(account)
         followAccount1.save()
 
-        and:
-        def fetchedAccount = Account.get(account.id)
-        def fetchedFollowAccount1 = Account.get(followAccount1.id)
-
         then:
-        fetchedAccount.follower.size() == 1
-        fetchedAccount.follower[0].id == fetchedFollowAccount1.id
-        fetchedAccount.following.size() == 1
-        fetchedAccount.following[0].id == fetchedFollowAccount1.id
-
-        and:
-        fetchedFollowAccount1.follower.size() == 1
-        fetchedFollowAccount1.follower[0].id == fetchedAccount.id
-        fetchedFollowAccount1.following.size() == 1
-        fetchedFollowAccount1.following[0].id == fetchedAccount.id
+        account.errors.errorCount == 0
+        followAccount1.errors.errorCount == 0
+        account.getFollower().size() == 1
+        account.getFollowing().size() == 1
+        followAccount1.getFollower().size() == 1
+        followAccount1.getFollowing().size() == 1
     }
 }

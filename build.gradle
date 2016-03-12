@@ -18,7 +18,7 @@ plugins {
 }
 
 version "0.1"
-group "twtr"
+group "twitter"
 
 apply plugin: "spring-boot"
 apply plugin: "war"
@@ -65,9 +65,9 @@ dependencies {
 
     runtime "org.grails.plugins:asset-pipeline"
 
-    testCompile "org.grails.plugins:hibernate"
     testCompile "org.grails:grails-plugin-testing"
     testCompile "org.grails.plugins:geb"
+    testCompile 'org.codehaus.groovy.modules.http-builder:http-builder:0.7'
 
     // Note: It is recommended to update to a more robust driver (Chrome, Firefox etc.)
     testRuntime 'org.seleniumhq.selenium:selenium-htmlunit-driver:2.44.0'
