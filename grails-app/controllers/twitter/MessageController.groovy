@@ -11,9 +11,11 @@ class MessageController extends RestfulController<Message> {
 
     @Override
     protected Message queryForResource(Serializable id) {
-        def accountId = params.accountId
+        def accountId = params.account
         Message.where {
             id == id && account.id == accountId
         }.find()
     }
+
+
 }
