@@ -55,7 +55,7 @@ class MessageControllerFunctionalSpec extends GebSpec {
 
 
 
-    /*def 'error response for invalid message text and user'() {
+    def 'error response for invalid message text and user'() {
         given:
         def account = new Account(handle: 'priyanka', email: 'priyanka1@yahoo.com', password: 'Priyanka1cool', name: 'Piku')
         def json = account as JSON
@@ -76,7 +76,7 @@ class MessageControllerFunctionalSpec extends GebSpec {
         then:
         def e = thrown(HttpResponseException)
         e.response.status == 422
-    }*/
+    }
 
 
     def 'show most recent 10 message for an account'() {
@@ -102,6 +102,13 @@ class MessageControllerFunctionalSpec extends GebSpec {
         resp2.status == 201
      //   resp2.data.messageText == "'+text+'"
         resp2.data.id == expectedtId
+
+        when:
+        def resp3 = restClient.get(path:"/accounts/${accountId}?offset=0&max=10")
+
+        then:
+        resp3. status == 200
+
 
         where:
         description | text               | expectedtId
