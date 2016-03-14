@@ -46,12 +46,21 @@ class AccountController extends RestfulController<Account> {
 
     def showFollowers() {
         if (params.id) {
+            def max = 10
+            def offset = 0
             def accountID = params.id
             def account = Account.get(accountID)
             if (account) {
+                if (params.max) {
+                    max = params.max
+                }
+
+                if (params.offset) {
+                    offset = params.offset
+                }
                 def followers = Account.findAll('from Account acc where acc.id in (:accounts)',
                         [accounts: Account.get(accountID).follower.id],
-                        [max: 10, offset: 0, order: 'asc'])
+                        [max: max, offset: offset, order: 'asc'])
 
                 render followers as JSON
             } else {
@@ -63,7 +72,6 @@ class AccountController extends RestfulController<Account> {
             response.status = 422
             render error:422, message:"Missing id"
         }
-
     }
 
     @Override
@@ -73,7 +81,7 @@ class AccountController extends RestfulController<Account> {
             if (account) {
                 def accountJSON = JSON.parse((account as JSON).toString())
                 accountJSON.put("numFollowers", account.follower.size())
-                accountJSON.put("numFollowing", account.follower.size())
+                accountJSON.put("numFollowing", account.following.size())
                 respond accountJSON
             } else {
                 response.status = 422
@@ -84,7 +92,7 @@ class AccountController extends RestfulController<Account> {
             if (account) {
                 def accountJSON = JSON.parse((account as JSON).toString())
                 accountJSON.put("numFollowers", account.follower.size())
-                accountJSON.put("numFollowing", account.follower.size())
+                accountJSON.put("numFollowing", account.following.size())
                 respond accountJSON
             } else {
                 response.status = 422
