@@ -13,7 +13,7 @@ class UrlMappings {
 
         "/accounts/$id/follow/$followId"(controller:'account',action:'followAccount')
 
-       // "/accounts/$id/followers"(controller:'account',action:'showFollowers')
+        "/accounts/$id/followers"(controller:'account',action:'showFollowers')
 
         "/"(view: "/index")
         "500"(view: '/error')

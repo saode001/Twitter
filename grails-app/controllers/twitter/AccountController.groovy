@@ -6,14 +6,15 @@ import grails.rest.RestfulController
 class AccountController extends RestfulController<Account> {
 
     static responseFormats = ['json', 'xml']
+
     AccountController() {
         super(Account)
     }
 
-   def followAccount() {
+    def followAccount() {
         if (params.id) {
-            if(params.followId) {
-                if(params.id != params.followId) {
+            if (params.followId) {
+                if (params.id != params.followId) {
                     def followerAccount = Account.get(params.id)
                     if (followerAccount) {
                         def followingAccount = Account.get(params.followId)
@@ -21,66 +22,73 @@ class AccountController extends RestfulController<Account> {
                             followerAccount.following.add(followingAccount)
                             followingAccount.follower.add(followerAccount)
                             respond followerAccount
-                        }
-                        else {
+                        } else {
                             response.status = 422
-                            respond error:422,message: "followID account does not exist"                        }
-                    }
-                    else {
+                            respond error: 422, message: "followID account does not exist"
+                        }
+                    } else {
                         response.status = 422
-                        respond error:422,message: "id account does not exist"
+                        respond error: 422, message: "id account does not exist"
                     }
-                }
-                else{
+                } else {
                     response.status = 422
-                    respond error:422,message: "Id and followID cannot match"
+                    respond error: 422, message: "Id and followID cannot match"
                 }
-            }
-            else{
+            } else {
                 response.status = 422
-                respond error:422, message: "followID missing"
+                respond error: 422, message: "followID missing"
             }
-        }
-       else{
+        } else {
             response.status = 422
-            respond error:422, message: "Id missing"
+            respond error: 422, message: "Id missing"
         }
     }
 
-   /* def showFollowers() {
-        if(param.id) {
-            def account = Account.get(param.id)
-            def followers = account.findBy
-            render followers
+    def showFollowers() {
+        if (params.id) {
+            def accountID = params.id
+            def account = Account.get(accountID)
+            if (account) {
+                def followers = Account.findAll('from Account acc where acc.id in (:accounts)',
+                        [accounts: Account.get(accountID).follower.id],
+                        [max: 10, offset: 0, order: 'asc'])
+
+                render followers as JSON
+            } else {
+                response.status = 422
+                render error:422, message:"Specified account with account ID ${accountID} doesn't exists"
+            }
         }
-    }*/
+        else{
+            response.status = 422
+            render error:422, message:"Missing id"
+        }
+
+    }
 
     @Override
-    def show(){
+    def show() {
         if ((params.id as String).isNumber()) {
             def account = Account.get(params.id)
-            if(account){
+            if (account) {
                 def accountJSON = JSON.parse((account as JSON).toString())
-                accountJSON.put("numFollowers",account.follower.size())
-                accountJSON.put("numFollowing",account.follower.size())
+                accountJSON.put("numFollowers", account.follower.size())
+                accountJSON.put("numFollowing", account.follower.size())
                 respond accountJSON
-            }
-            else {
+            } else {
                 response.status = 422
-                respond error:422, message: "Account ID does not exist"
+                respond error: 422, message: "Account ID does not exist"
             }
-        }
-        else {
+        } else {
             def account = Account.findByHandle(params.id)
-            if(account){
+            if (account) {
                 def accountJSON = JSON.parse((account as JSON).toString())
-                accountJSON.put("numFollowers",account.follower.size())
-                accountJSON.put("numFollowing",account.follower.size())
+                accountJSON.put("numFollowers", account.follower.size())
+                accountJSON.put("numFollowing", account.follower.size())
                 respond accountJSON
-            }
-            else {
+            } else {
                 response.status = 422
-                respond error:422, message: "Account handle does not exist"
+                respond error: 422, message: "Account handle does not exist"
             }
         }
     }
