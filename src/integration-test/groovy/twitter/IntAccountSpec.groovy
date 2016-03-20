@@ -7,6 +7,7 @@ import spock.lang.*
 
 @Integration
 @Rollback
+@Ignore
 class IntAccountSpec extends Specification {
 
     def 'create new account' () {
