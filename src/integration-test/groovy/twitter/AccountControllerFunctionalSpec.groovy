@@ -5,6 +5,7 @@ import grails.converters.JSON
 import grails.test.mixin.integration.Integration
 import groovyx.net.http.HttpResponseException
 import groovyx.net.http.RESTClient
+import spock.lang.Ignore
 import spock.lang.Shared
 import spock.lang.Stepwise
 
@@ -86,7 +87,7 @@ class AccountControllerFunctionalSpec extends GebSpec {
         def json = account as JSON
 
         when:
-        def resp = restClient.post(path: '/accounts', body: json as String, requestContentType: 'application/json')
+        restClient.post(path: '/accounts', body: json as String, requestContentType: 'application/json')
 
         then:
         def e = thrown(HttpResponseException)
@@ -99,7 +100,7 @@ class AccountControllerFunctionalSpec extends GebSpec {
         def json = account as JSON
 
         when:
-        def resp = restClient.post(path: '/accounts', body: json as String, requestContentType: 'application/json')
+        restClient.post(path: '/accounts', body: json as String, requestContentType: 'application/json')
 
         then:
         def e = thrown(HttpResponseException)
@@ -255,7 +256,7 @@ class AccountControllerFunctionalSpec extends GebSpec {
         json = account as JSON
         resp = restClient.post(path: '/accounts', body: json as String, requestContentType: 'application/json')
         followeeId = resp.data.id
-        resp = restClient.get(path: "/accounts/${followeeId}/follow/${accountId}")
+        restClient.get(path: "/accounts/${followeeId}/follow/${accountId}")
 
         when:
         def resp1 = restClient.get(path: "/accounts/${accountId}")
@@ -274,6 +275,7 @@ class AccountControllerFunctionalSpec extends GebSpec {
         resp2.data.numFollowing == 1
     }
 
+    @Ignore
     def "test max of 10 and offset"() {
         given:
         def account = new Account(handle: handle, email: email, password: 'TestPassword1', name: name)
