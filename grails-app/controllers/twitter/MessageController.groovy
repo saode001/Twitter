@@ -22,11 +22,19 @@ class MessageController extends RestfulController<Message> {
       } else {
         account = Account.findByAccountHandle(params.accountId)
       }
-      def msgList = Message.findAllByAccount(account, [max: params.max, sort: "id", order: "desc", offset: params.offset, text: params.text])
+      def msgList = Message.findAllByAccount(account, [max: params.max, sort: "dateCreated", order: "desc", offset: params.offset, text: params.text])
       respond msgList
     } else {
       respond(status: 404, msgError: "No message found")
     }
+  }
+
+  def searchMessages() {
+
+    def msgList = Message.where {messageText ==~ "%$params.searchTerm%"}.list().collect {
+      m -> return [message: m, handle: Account.get(m.account.id).handle]
+    }
+    respond msgList
   }
 
   @Override

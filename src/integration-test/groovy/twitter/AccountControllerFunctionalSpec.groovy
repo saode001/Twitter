@@ -5,10 +5,9 @@ import grails.converters.JSON
 import grails.test.mixin.integration.Integration
 import groovyx.net.http.HttpResponseException
 import groovyx.net.http.RESTClient
-import spock.lang.Ignore
 import spock.lang.Shared
 import spock.lang.Stepwise
-
+import java.text.SimpleDateFormat
 
 @Integration
 @Stepwise
@@ -256,7 +255,7 @@ class AccountControllerFunctionalSpec extends GebSpec {
         json = account as JSON
         resp = restClient.post(path: '/accounts', body: json as String, requestContentType: 'application/json')
         followeeId = resp.data.id
-        restClient.get(path: "/accounts/${followeeId}/follow/${accountId}")
+        resp = restClient.get(path: "/accounts/${followeeId}/follow/${accountId}")
 
         when:
         def resp1 = restClient.get(path: "/accounts/${accountId}")
@@ -275,8 +274,7 @@ class AccountControllerFunctionalSpec extends GebSpec {
         resp2.data.numFollowing == 1
     }
 
-    @Ignore
-    def "test max of 10 and offset"() {
+    def "add a bunch of follwers"() {
         given:
         def account = new Account(handle: handle, email: email, password: 'TestPassword1', name: name)
         def json = account as JSON
@@ -305,48 +303,119 @@ class AccountControllerFunctionalSpec extends GebSpec {
         resp.data.numFollowers == numFollowers
 
         when:
-        resp = restClient.get(path: "/accounts/${followId}/followers?max=10&offset=${offset}")
+        resp = restClient.get(path: "/accounts/${followId}/followers")
 
         then:
-        resp.data.followers.size() == 5
-
+        resp.status == 200
+        resp.data.first().name == name
 
         where:
-        description                 | handle   | email                                 | name                    | numFollowers | offset
-        'Add John Tyler'            | 'Pres10' | 'John.Tyler@whitehouse.gov'           | 'John Tyler'            | 6            | 0
-        'Add James K. Polk'         | 'Pres11' | 'James.K.Polk@whitehouse.gov'         | 'James K. Polk'         | 7            | 0
-        'Add Zachary Taylor'        | 'Pres12' | 'Zachary.Taylor@whitehouse.gov'       | 'Zachary Taylor'        | 8            | 0
-        'Add Millard Fillmore'      | 'Pres13' | 'Millard.Fillmore@whitehouse.gov'     | 'Millard Fillmore'      | 9            | 0
-        'Add Franklin Pierce'       | 'Pres14' | 'Franklin.Pierce@whitehouse.gov'      | 'Franklin Pierce'       | 10           | 0
-        'Add James Buchanan'        | 'Pres15' | 'James.Buchanan@whitehouse.gov'       | 'James Buchanan'        | 11           | 1
-        'Add Abraham Lincoln'       | 'Pres16' | 'Abraham.Lincoln@whitehouse.gov'      | 'Abraham Lincoln'       | 12           | 1
-        'Add Andrew Johnson'        | 'Pres17' | 'Andrew.Johnson@whitehouse.gov'       | 'Andrew Johnson'        | 13           | 1
-        'Add Ulysses S. Grant'      | 'Pres18' | 'Ulysses.S.Grant@whitehouse.gov'      | 'Ulysses S. Grant'      | 14           | 1
-        'Add Rutherford B. Hayes'   | 'Pres19' | 'Rutherford.B.Hayes@whitehouse.gov'   | 'Rutherford B. Hayes'   | 15           | 1
-        'Add James A. Garfield'     | 'Pres20' | 'James.A.Garfield@whitehouse.gov'     | 'James A. Garfield'     | 16           | 1
-        'Add Chester Arthur'        | 'Pres21' | 'Chester.Arthur@whitehouse.gov'       | 'Chester Arthur'        | 17           | 1
-        'Add Grover Cleveland'      | 'Pres22' | 'Grover.Cleveland@whitehouse.gov'     | 'Grover Cleveland'      | 18           | 1
-        'Add Benjamin Harrison'     | 'Pres23' | 'Benjamin.Harrison@whitehouse.gov'    | 'Benjamin Harrison'     | 19           | 1
-        'Add Grover Cleveland'      | 'Pres24' | 'Grover.Cleveland@whitehouse.gov'     | 'Grover Cleveland'      | 20           | 1
-        'Add William McKinley'      | 'Pres25' | 'William.McKinley@whitehouse.gov'     | 'William McKinley'      | 21           | 2
-        'Add Theodore Roosevelt'    | 'Pres26' | 'Theodore.Roosevelt@whitehouse.gov'   | 'Theodore Roosevelt'    | 22           | 2
-        'Add William Howard Taft'   | 'Pres27' | 'William.Howard.Taft@whitehouse.gov'  | 'William Howard Taft'   | 23           | 2
-        'Add Woodrow Wilson'        | 'Pres28' | 'Woodrow.Wilson@whitehouse.gov'       | 'Woodrow Wilson'        | 24           | 2
-        'Add Warren G. Harding'     | 'Pres29' | 'Warren.G.Harding@whitehouse.gov'     | 'Warren G. Harding'     | 25           | 2
-        'Add Calvin Coolidge'       | 'Pres30' | 'Calvin.Coolidge@whitehouse.gov'      | 'Calvin Coolidge'       | 26           | 2
-        'Add Herbert Hoover'        | 'Pres31' | 'Herbert.Hoover@whitehouse.gov'       | 'Herbert Hoover'        | 27           | 2
-        'Add Franklin D. Roosevelt' | 'Pres32' | 'Franklin.D.Roosevelt@whitehouse.gov' | 'Franklin D. Roosevelt' | 28           | 2
-        'Add Harry S. Truman'       | 'Pres33' | 'Harry.S.Truman@whitehouse.gov'       | 'Harry S. Truman'       | 29           | 2
-        'Add Dwight D. Eisenhower'  | 'Pres34' | 'Dwight.D.Eisenhower@whitehouse.gov'  | 'Dwight D. Eisenhower'  | 30           | 2
-        'Add John F. Kennedy'       | 'Pres35' | 'John.F.Kennedy@whitehouse.gov'       | 'John F. Kennedy'       | 31           | 3
-        'Add Lyndon B. Johnson'     | 'Pres36' | 'Lyndon.B.Johnson@whitehouse.gov'     | 'Lyndon B. Johnson'     | 32           | 3
-        'Add Richard Nixon'         | 'Pres37' | 'Richard.Nixon@whitehouse.gov'        | 'Richard Nixon'         | 33           | 3
-        'Add Gerald Ford'           | 'Pres38' | 'Gerald.Ford@whitehouse.gov'          | 'Gerald Ford'           | 34           | 3
-        'Add Jimmy Carter'          | 'Pres39' | 'Jimmy.Carter@whitehouse.gov'         | 'Jimmy Carter'          | 35           | 3
-        'Add Ronald Reagan'         | 'Pres40' | 'Ronald.Reagan@whitehouse.gov'        | 'Ronald Reagan'         | 36           | 3
-        'Add George Bush'           | 'Pres41' | 'George.Bush@whitehouse.gov'          | 'George Bush'           | 37           | 3
-        'Add Bill Clinton'          | 'Pres42' | 'Bill.Clinton@whitehouse.gov'         | 'Bill Clinton'          | 38           | 3
-        'Add George W. Bush'        | 'Pres43' | 'George.W.Bush@whitehouse.gov'        | 'George W. Bush'        | 39           | 3
-        'Add Barack Obama'          | 'Pres44' | 'Barack.Obama@whitehouse.gov'         | 'Barack Obama'          | 40           | 3
+        description                 | handle   | email                                 | name                    | numFollowers
+        'Add John Tyler'            | 'Pres10' | 'John.Tyler@whitehouse.gov'           | 'John Tyler'            | 6
+        'Add James K. Polk'         | 'Pres11' | 'James.K.Polk@whitehouse.gov'         | 'James K. Polk'         | 7
+        'Add Zachary Taylor'        | 'Pres12' | 'Zachary.Taylor@whitehouse.gov'       | 'Zachary Taylor'        | 8
+        'Add Millard Fillmore'      | 'Pres13' | 'Millard.Fillmore@whitehouse.gov'     | 'Millard Fillmore'      | 9
+        'Add Franklin Pierce'       | 'Pres14' | 'Franklin.Pierce@whitehouse.gov'      | 'Franklin Pierce'       | 10
+        'Add James Buchanan'        | 'Pres15' | 'James.Buchanan@whitehouse.gov'       | 'James Buchanan'        | 11
+        'Add Abraham Lincoln'       | 'Pres16' | 'Abraham.Lincoln@whitehouse.gov'      | 'Abraham Lincoln'       | 12
+        'Add Andrew Johnson'        | 'Pres17' | 'Andrew.Johnson@whitehouse.gov'       | 'Andrew Johnson'        | 13
+        'Add Ulysses S. Grant'      | 'Pres18' | 'Ulysses.S.Grant@whitehouse.gov'      | 'Ulysses S. Grant'      | 14
+        'Add Rutherford B. Hayes'   | 'Pres19' | 'Rutherford.B.Hayes@whitehouse.gov'   | 'Rutherford B. Hayes'   | 15
+        'Add James A. Garfield'     | 'Pres20' | 'James.A.Garfield@whitehouse.gov'     | 'James A. Garfield'     | 16
+        'Add Chester Arthur'        | 'Pres21' | 'Chester.Arthur@whitehouse.gov'       | 'Chester Arthur'        | 17
+        'Add Grover Cleveland'      | 'Pres22' | 'Grover.Cleveland@whitehouse.gov'     | 'Grover Cleveland'      | 18
+        'Add Benjamin Harrison'     | 'Pres23' | 'Benjamin.Harrison@whitehouse.gov'    | 'Benjamin Harrison'     | 19
+        'Add William McKinley'      | 'Pres25' | 'William.McKinley@whitehouse.gov'     | 'William McKinley'      | 20
+        'Add Theodore Roosevelt'    | 'Pres26' | 'Theodore.Roosevelt@whitehouse.gov'   | 'Theodore Roosevelt'    | 21
+        'Add William Howard Taft'   | 'Pres27' | 'William.Howard.Taft@whitehouse.gov'  | 'William Howard Taft'   | 22
+        'Add Woodrow Wilson'        | 'Pres28' | 'Woodrow.Wilson@whitehouse.gov'       | 'Woodrow Wilson'        | 23
+        'Add Warren G. Harding'     | 'Pres29' | 'Warren.G.Harding@whitehouse.gov'     | 'Warren G. Harding'     | 24
+        'Add Calvin Coolidge'       | 'Pres30' | 'Calvin.Coolidge@whitehouse.gov'      | 'Calvin Coolidge'       | 25
+        'Add Herbert Hoover'        | 'Pres31' | 'Herbert.Hoover@whitehouse.gov'       | 'Herbert Hoover'        | 26
+        'Add Franklin D. Roosevelt' | 'Pres32' | 'Franklin.D.Roosevelt@whitehouse.gov' | 'Franklin D. Roosevelt' | 27
+        'Add Harry S. Truman'       | 'Pres33' | 'Harry.S.Truman@whitehouse.gov'       | 'Harry S. Truman'       | 28
+        'Add Dwight D. Eisenhower'  | 'Pres34' | 'Dwight.D.Eisenhower@whitehouse.gov'  | 'Dwight D. Eisenhower'  | 29
+        'Add John F. Kennedy'       | 'Pres35' | 'John.F.Kennedy@whitehouse.gov'       | 'John F. Kennedy'       | 30
+        'Add Lyndon B. Johnson'     | 'Pres36' | 'Lyndon.B.Johnson@whitehouse.gov'     | 'Lyndon B. Johnson'     | 31
+        'Add Richard Nixon'         | 'Pres37' | 'Richard.Nixon@whitehouse.gov'        | 'Richard Nixon'         | 32
+        'Add Gerald Ford'           | 'Pres38' | 'Gerald.Ford@whitehouse.gov'          | 'Gerald Ford'           | 33
+        'Add Jimmy Carter'          | 'Pres39' | 'Jimmy.Carter@whitehouse.gov'         | 'Jimmy Carter'          | 34
+        'Add Ronald Reagan'         | 'Pres40' | 'Ronald.Reagan@whitehouse.gov'        | 'Ronald Reagan'         | 35
+        'Add George Bush'           | 'Pres41' | 'George.Bush@whitehouse.gov'          | 'George Bush'           | 36
+        'Add Bill Clinton'          | 'Pres42' | 'Bill.Clinton@whitehouse.gov'         | 'Bill Clinton'          | 37
+        'Add George W. Bush'        | 'Pres43' | 'George.W.Bush@whitehouse.gov'        | 'George W. Bush'        | 38
+        'Add Barack Obama'          | 'Pres44' | 'Barack.Obama@whitehouse.gov'         | 'Barack Obama'          | 39
+    }
+
+    def "Test offset and max"() {
+        given:
+        def resp = restClient.get(path: '/accounts/Pres1')
+        def followId = resp.data.id
+
+        when:
+        resp = restClient.get(path: "/accounts/${followId}/followers", query: [max: max, offset: offset])
+
+        then:
+        resp.data.first().name == first
+        resp.data.last().name == last
+
+        where:
+        description        | offset | max | first                   | last
+        'Offset 0, max 10' | 0      | 10  | 'Barack Obama'          | 'John F. Kennedy'
+        'offset 5, max 3'  | 5      | 3   | 'Jimmy Carter'          | 'Richard Nixon'
+        'offset 12, max 8' | 12     | 8   | 'Franklin D. Roosevelt' | 'William McKinley'
+    }
+
+    def "Add messages to the followers"() {
+        given:
+        def resp = restClient.get(path: '/accounts/Pres' + PresNumber)
+
+        when:
+        def accountID = resp.data.id
+        def accountName = resp.data.name
+        def message = '{"messageText": The ' + PresNumber + 'th President is ' + accountName + '}'
+        resp = restClient.post(path: "/accounts/${accountID}/messages", body: message, requestContentType: 'application/json')
+
+        then:
+        resp.status == 201
+        resp.data.messageText == 'The ' + PresNumber + 'th President is ' + accountName
+
+        where:
+        description | PresNumber
+        ''          | 12
+        ''          | 28
+        ''          | 36
+    }
+
+    def "Test the feed for Pres1"() {
+        given:
+        def resp = restClient.get(path: '/accounts/Pres1')
+        def accountId = resp.data.id
+
+        when:
+        resp = restClient.get( path: "/accounts/${accountId}/feed" )
+
+        then:
+        resp.status == 200
+        resp.data.messages
+
+        when:
+        resp = restClient.get( path: "/accounts/${accountId}/feed",query:[max:2,offset:1] )
+
+        then:
+        resp.status == 200
+        resp.data.messages
+        resp.data.messages.size() == 2
+
+        when:
+        def dateNow = new SimpleDateFormat("EEE MMM dd HH:mm:ss zzz yyyy").parse("Tue Aug 02 21:53:43 EST 2016")
+        resp = restClient.get( path: "/accounts/${accountId}/feed",query:[beforeDate:dateNow] )
+
+        then:
+        resp.status == 200
+        resp.data.messages.size() == 0
+
+
+
     }
 }
