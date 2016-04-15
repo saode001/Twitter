@@ -14,110 +14,128 @@ import javax.xml.soap.Text
  */
 @Integration
 @Stepwise
+@Ignore
 //@Rollback
 class MessageControllerFunctionalSpec extends GebSpec {
-  @Shared
-  def accountId
+    @Shared
+    def accountId
 
-  RESTClient restClient
+    RESTClient restClient
 
-  def setup() {
-    restClient = new RESTClient(baseUrl)
-  }
-
-  def 'create a new message'() {
-    given:
-    def account = new Account(handle: 'country', email: 'country1@yahoo.com', password: 'Country1cool', name: 'CountryCool')
-    def json = account as JSON
-
-    when:
-    def resp = restClient.post(path: '/accounts', body: json as String, requestContentType: 'application/json')
-
-    then:
-    resp.status == 201
-    resp.data
-
-    when:
-    accountId = resp.data.id
-    resp.data.handle == 'country'
-
-    def message = '{"messageText": "Test Message"}'
-    def resp1 = restClient.post(path: "/accounts/${accountId}/messages", body: message, requestContentType: 'application/json')
-
-    then:
-    resp1.status == 201
-    resp1.data
-
-    resp1.data.messageText == "Test Message"
-
-  }
-
-
-  def 'error response for invalid message text and user'() {
-    given:
-    def account = new Account(handle: 'priyanka', email: 'priyanka1@yahoo.com', password: 'Priyanka1cool', name: 'Piku')
-    def json = account as JSON
-    when:
-    def resp = restClient.post(path: '/accounts', body: json as String, requestContentType: 'application/json')
-
-    then:
-    resp.status == 201
-    resp.data
-
-    when:
-    accountId = resp.data.id
-
-    def message = '{"messageText": ""}'
-    def resp1 = restClient.post(path: "/accounts/${accountId}/messages", body: message, requestContentType: 'application/json')
-
-    then:
-    def e = thrown(HttpResponseException)
-    e.response.status == 422
-  }
-
-  def 'show most recent 10 message for an account'() {
-
-    when: 'Create 10 messages 2 - 12'
-    def responses = []
-    (2..20).each {
-      def message = ([messageText: "It's message ${it}"] as JSON) as String
-      responses << restClient.post(path: "/accounts/${accountId}/messages", body: message, requestContentType: 'application/json')
+    def setup() {
+        restClient = new RESTClient(baseUrl)
     }
 
-    then: 'make sure all the responses are valid creates'
-    responses.each { response ->
-      assert response.status == 201
+
+    def 'create a new message'() {
+        given:
+        def account = new Account(handle:'country',email:'country1@yahoo.com',password:'Country1cool',name:'CountryCool')
+        def json = account as JSON
+
+        when:
+        def resp = restClient.post(path: '/accounts', body: json as String, requestContentType: 'application/json')
+
+        then:
+        resp.status == 201
+        resp.data
+
+        when:
+        accountId = resp.data.id
+        resp.data.handle == 'country'
+
+        def message = '{"messageText": "Test Message"}'
+        def resp1 = restClient.post(path:"/accounts/${accountId}/messages",body:message,requestContentType:'application/json')
+
+        then:
+        resp1.status == 201
+        resp1.data
+
+        resp1.data.messageText == "Test Message"
+
     }
 
-    when: 'get messages for account, with no limit should only get 10'
-    def resp3 = restClient.get(path: "/accounts/${accountId}/messages")
-    def messages = resp3.data as List
 
-    then: 'request should succeed'
-    resp3.status == 200
 
-    and: 'should get back 10 messages'
-    messages.size() == 10
+    def 'error response for invalid message text and user'() {
+        given:
+        def account = new Account(handle: 'priyanka', email: 'priyanka1@yahoo.com', password: 'Priyanka1cool', name: 'Piku')
+        def json = account as JSON
+        when:
+        def resp = restClient.post(path: '/accounts', body: json as String, requestContentType: 'application/json')
 
-    and: 'should get messages from 20 to 11'
-    messages[0].messageText == "It's message 20"
-    messages[9].messageText == "It's message 11"
+        then:
+        resp.status == 201
+        resp.data
 
-    when: 'get messages for account, limit to 3 and skip the first one'
-    def resp4 = restClient.get(path: "/accounts/${accountId}/messages", query: [offset:1, max: 3])
-    messages = resp4.data as List
+        when:
+        accountId = resp.data.id
+        // resp.data.handle == 'country'
 
-    then: 'request should succeed'
-    resp4.status == 200
+         def message = '{"messageText": ""}'
+        def resp1 = restClient.post(path:"/accounts/${accountId}/messages",body:message,requestContentType:'application/json')
 
-    and: 'should get back 3 messages'
-    messages.size() == 3
+        then:
+        def e = thrown(HttpResponseException)
+        e.response.status == 422
+    }
 
-    and: 'messages should be 19, 18, 17 (skipping 20)'
-    messages[0].messageText == "It's message 19"
-    messages[1].messageText == "It's message 18"
-    messages[2].messageText == "It's message 17"
-  }
+
+    def 'show most recent 10 message for an account'() {
+        given:
+        accountId
+     //   def account = new Account(handle: 'Emily', email: 'emily1@yahoo.com', password: 'Emily1cool', name: 'Emmi')
+      //  def json = account as JSON
+      //  when:
+      //  def resp = restClient.post(path: '/accounts', body: json as String, requestContentType: 'application/json')
+
+      //  then:
+      //  resp.status == 201
+      //  resp.data
+
+        when:
+       // accountId = resp.data.id
+        // resp.data.handle == 'country'
+
+        def message = '{"messageText": "'+text+'"}'
+        def resp2 = restClient.post(path:"/accounts/${accountId}/messages",body:message,requestContentType:'application/json')
+
+        then:
+        resp2.status == 201
+     //   resp2.data.messageText == "'+text+'"
+        resp2.data.id == expectedtId
+
+        when:
+        def resp3 = restClient.get(path:"/accounts/${accountId}?offset=0&max=10")
+
+        then:
+        resp3. status == 200
+
+
+        where:
+        description | text               | expectedtId
+       // 'message1'  | "It's message 1"   | 1
+        'message2'  | "It's message 2"   | 2
+        'message3'  | "It's message 3"   | 3
+        'message4'  | "It's message 4"   | 4
+        'message5'  | "It's message 5"   | 5
+        'message6'  | "It's message 6"   | 6
+        'message7'  | "It's message 7"   | 7
+        'message8'  | "It's message 8"   | 8
+        'message9'  | "It's message 9"   | 9
+        'message10' | "It's message 10"  | 10
+        'message11' | "It's message 11"  | 11
+        'message12' | "It's message 12"  | 12
+    }
 
 }
 
+//def cleanup() {
+// }
+
+//void "test something"() {
+//   when:"The home page is visited"
+//       go '/'
+
+//   then:"The title is correct"
+//   	$('title').text() == "Welcome to Grails"
+//}

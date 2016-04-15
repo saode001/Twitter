@@ -1,0 +1,32 @@
+angular.module('app').controller('loginController', function($scope, $location, securityService) {
+
+    $scope.loginInput = {};
+
+
+        $scope.doLogin = function() {
+            securityService
+                .login($scope.loginInput.username, $scope.loginInput.password)
+                .finally(function(result){
+                    var currentUser = securityService.currentUser();
+                    if (currentUser) {
+                        delete $scope.error;
+                        $location.path('/feed');
+                    } else {
+                        $scope.error = 'Invalid login';
+                    }
+                });
+        };
+
+    });
+
+
+
+
+
+
+
+
+
+
+
+

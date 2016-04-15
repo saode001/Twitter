@@ -11,3 +11,5 @@ out/
 .project
 .settings
 .classpath
+grails-app/assets/bower
+node_modules/

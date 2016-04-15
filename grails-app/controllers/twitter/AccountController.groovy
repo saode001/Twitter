@@ -2,7 +2,6 @@ package twitter
 
 import grails.converters.JSON
 import grails.rest.RestfulController
-import java.text.SimpleDateFormat
 
 class AccountController extends RestfulController<Account> {
 
@@ -59,9 +58,9 @@ class AccountController extends RestfulController<Account> {
                 if (params.offset) {
                     offset = params.offset
                 }
-                def followers = Account.findAll('from Account acc where acc.id in (:accounts) order by acc.id desc',
+                def followers = Account.findAll('from Account acc where acc.id in (:accounts)',
                         [accounts: Account.get(accountID).follower.id],
-                        [max: max, offset: offset])
+                        [max: max, offset: offset, order: 'asc'])
 
                 render followers as JSON
             } else {
@@ -73,21 +72,6 @@ class AccountController extends RestfulController<Account> {
             response.status = 422
             render error:422, message:"Missing id"
         }
-    }
-
-    def returnFeed(){
-        int maximum = params.max == null ? 10 : Integer.parseInt(params.max)
-        int offset = params.offset == null ? 0 : Integer.parseInt(params.offset)
-        def followAccounts = Account.get(params.id).follower.id
-
-        def msgList = Message.createCriteria().list(max: maximum, offset: offset){
-            'in(account, $followAccounts)'
-            if (params.beforeDate != null) {
-                gte('dateCreated', new SimpleDateFormat("EEE MMM dd HH:mm:ss zzz yyyy").parse(params.beforeDate))
-            }
-            order('dateCreated','desc')
-        }
-        respond msgList
     }
 
     @Override

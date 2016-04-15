@@ -15,7 +15,12 @@ buildscript {
 
 plugins {
     id "io.spring.dependency-management" version "0.5.4.RELEASE"
+    id 'com.craigburke.bower-installer' version '2.5.1'
 }
+
+//plugins {
+//  id "io.spring.dependency-management" version "0.5.4.RELEASE"
+//}
 
 version "0.1"
 group "twitter"
@@ -28,15 +33,20 @@ apply plugin: 'idea'
 apply plugin: "org.grails.grails-web"
 apply plugin: "org.grails.grails-gsp"
 
+//plugins {
+//    id "io.spring.dependency-management" version "0.5.4.RELEASE"
+//    id 'com.craigburke.bower-installer' version '2.5.1'
+//}
+
 ext {
     grailsVersion = project.grailsVersion
     gradleWrapperVersion = project.gradleWrapperVersion
 }
 
-assets {
-    minifyJs = true
-    minifyCss = true
-}
+//assets {
+//    minifyJs = true
+//    minifyCss = true
+//}
 
 repositories {
     mavenLocal()
@@ -51,6 +61,7 @@ dependencyManagement {
 }
 
 dependencies {
+    assets "com.craigburke.angular:angular-template-asset-pipeline:2.2.7"
     compile "org.springframework.boot:spring-boot-starter-logging"
     compile "org.springframework.boot:spring-boot-starter-actuator"
     compile "org.springframework.boot:spring-boot-autoconfigure"
@@ -63,18 +74,72 @@ dependencies {
     compile "org.hibernate:hibernate-ehcache"
     compile "org.grails.plugins:scaffolding"
 
+    compile 'org.grails.plugins:spring-security-rest:2.0.0.M2'  // Security Related Stuff
+    compile 'org.grails.plugins:spring-security-rest-gorm:2.0.0.M2' // Security Related Stuff
+    //profile "org.grails.profiles:web:3.1.1"
     runtime "org.grails.plugins:asset-pipeline"
-
+    runtime "com.h2database:h2"
     testCompile "org.grails:grails-plugin-testing"
     testCompile "org.grails.plugins:geb"
     testCompile 'org.codehaus.groovy.modules.http-builder:http-builder:0.7'
+    testRuntime "net.sourceforge.htmlunit:htmlunit:2.18"
+    testCompile "com.google.guava:guava:18.0"
 
     // Note: It is recommended to update to a more robust driver (Chrome, Firefox etc.)
-    testRuntime 'org.seleniumhq.selenium:selenium-htmlunit-driver:2.44.0'
+    testRuntime 'org.seleniumhq.selenium:selenium-htmlunit-driver:2.47.1'
+        console "org.grails:grails-console"
+    testRuntime 'org.seleniumhq.selenium:selenium-firefox-driver:2.53.0'
+    testRuntime 'org.seleniumhq.selenium:selenium-chrome-driver:2.53.0'
 
-    console "org.grails:grails-console"
 }
+
+
+bower {
+
+    'bootstrap'('3.3.x') {
+        source 'dist/css/bootstrap.css' >> 'css/'
+        source 'dist/css/bootstrap-theme.css' >> 'css/'
+        source 'dist/fonts/**' >> 'fonts/'
+        source 'dist/js/bootstrap.js'
+        excludes 'jquery'
+    }
+
+   // 'angular'('1.3.x') {
+    //    source 'angular.js'
+   //     source 'angular-csp.css'
+   // }
+
+
+    'angular'('1.5.x') {
+        source 'angular.js'
+        source 'angular-csp.css'
+    }
+
+    'angular-route'('1.5.x') {
+        source 'angular-route.js'
+    }
+
+    'angular-resource'('1.5.x') {
+        source 'angular-resource.js'
+    }
+}
+
+
+
+compileJava.dependsOn bowerInstall
+clean.dependsOn bowerClean
 
 task wrapper(type: Wrapper) {
     gradleVersion = gradleWrapperVersion
 }
+
+
+assets {
+    minifyJs = true
+    minifyCss = true
+
+
+
+
+}
+
