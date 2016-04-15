@@ -15,7 +15,11 @@ class UrlMappings {
 
         "/accounts/$id/followers"(controller:'account',action:'showFollowers')
 
-        "/"(view: 'index')
+        "/messages/search/$searchTerm"(controller: 'message',action:'searchMessages')
+
+        "/accounts/$id/feed"(controller: 'account',action:'returnFeed')
+
+		"/"(view: 'index')
         "500"(controller: 'Error', action: 'internalServerError')
         "404"(controller: 'Error', action: 'notFound')
         "401"(controller: 'Error', action: 'unauthorized')
