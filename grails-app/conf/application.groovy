@@ -9,17 +9,17 @@ grails.plugin.springsecurity.filterChain.chainMap = [
 ]
 
 grails.plugin.springsecurity.rest.token.storage.useGorm = true
-grails.plugin.springsecurity.rest.token.storage.gorm.tokenDomainClassName = 'grails.security.AuthenticationToken'
+grails.plugin.springsecurity.rest.token.storage.gorm.tokenDomainClassName = 'twitter.AuthenticationToken'
 grails.plugin.springsecurity.rest.token.validation.useBearerToken = false
 grails.plugin.springsecurity.rest.token.validation.headerName = 'X-Auth-Token'
 
-grails.plugin.springsecurity.userLookup.userDomainClassName = 'grails.security.User'
-grails.plugin.springsecurity.userLookup.authorityJoinClassName = 'grails.security.UserRole'
-grails.plugin.springsecurity.authority.className = 'grails.security.Role'
+grails.plugin.springsecurity.userLookup.userDomainClassName = 'twitter.Account'
+grails.plugin.springsecurity.userLookup.authorityJoinClassName = 'twitter.UserRole'
+grails.plugin.springsecurity.authority.className = 'twitter.Role'
 
 grails.plugin.springsecurity.securityConfigType = 'InterceptUrlMap'
 grails.plugin.springsecurity.interceptUrlMap = [
         [
-                [pattern: '/api/accounts/**', access: ['ROLE_READ']]
+                [pattern: '/api/**', access: ['ROLE_READ']]
         ]
 ]

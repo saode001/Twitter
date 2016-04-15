@@ -1,1 +1,1 @@
-{"name":"gradle-bower-installer","dependencies":{"bootstrap":"3.3.x","angular":"1.5.x","angular-route":"1.5.x","angular-resource":"1.5.x"}}
+{"name":"gradle-bower-installer","dependencies":{"bootstrap":"3.3.x","angular":"1.5.x","angular-route":"1.5.x","angular-resource":"1.5.x","angular-webstorage":"latest"}}

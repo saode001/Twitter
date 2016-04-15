@@ -11,24 +11,7 @@
 //= require ../bower/angular-resource/angular-resource.js
 //= require ../bower/angular-route/angular-route.js
 //= require ../bower/angular-webstorage/angular-webstorage.js
-//= require_tree app
-var app = angular.module('app', ['ngRoute']);
-/*if (typeof jQuery !== 'undefined') {
-    (function($) {
-        $('#spinner').ajaxStart(function() {
-            $(this).fadeIn();
-        }).ajaxStop(function() {
-            $(this).fadeOut();
-        });
-    })(jQuery);
-}
+//= require_self
+//= require_tree .
 
-// Create the angular application called 'app'
-
-//angular.module('app', ['ngRoute', 'ngResource', 'webStorageModule']);
-
-// Define a controller called 'welcomeController'
-//angular.module('app').controller('LoginController', function($scope) {
-   // $scope.greeting = 'Hello Stranger'
-});
-    */
+angular.module('app', ['ngRoute', 'ngResource', 'webStorageModule']);

@@ -13,6 +13,7 @@ import spock.lang.*
 
 @Integration
 @Stepwise
+@Ignore
 class AccountResourceFunctionalSpec  extends GebSpec{
     RESTClient restClient
 

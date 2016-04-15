@@ -14,6 +14,7 @@ import javax.xml.soap.Text
  */
 @Integration
 @Stepwise
+@Ignore
 //@Rollback
 class MessageControllerFunctionalSpec extends GebSpec {
   @Shared

@@ -3,8 +3,10 @@ package twitter
 import geb.spock.GebSpec
 import grails.test.mixin.integration.Integration
 import geb.spock.*
+import spock.lang.Ignore
 
 @Integration
+@Ignore
 /**
  * Created by Priyanka on 4/9/2016.
  */

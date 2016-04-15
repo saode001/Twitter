@@ -6,6 +6,7 @@ class UrlMappings {
                 // apply constraints here
             }
         }
+        "/"(view: '/index')
 
         "/accounts"(resources:'account') {
             "/messages"(resources:'message')
@@ -19,7 +20,7 @@ class UrlMappings {
 
         "/accounts/$id/feed"(controller: 'account',action:'returnFeed')
 
-		"/"(view: 'index')
+
         "500"(controller: 'Error', action: 'internalServerError')
         "404"(controller: 'Error', action: 'notFound')
         "401"(controller: 'Error', action: 'unauthorized')

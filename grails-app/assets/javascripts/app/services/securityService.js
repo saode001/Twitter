@@ -1,30 +1,36 @@
-angular.module('app').factory('securityService', ['$http', '$rootScope', function ($http, $rootScope) {
-    var service = {};
-    var currentUser;
+angular.module('app').factory('securityService', ['$http', '$rootScope', 'webStorage', function ($http, $rootScope, webStorage) {
+  var service = {};
 
-    var loginSuccess = function (response) {
-        currentUser = {
-            username: response.data.username,
-            roles: response.data.roles,
-            token: response.data['access_token']
-        };
+  var currentUser;
 
-        $rootScope.$emit('userChange', currentUser)
-    };
+  var setCurrentUser = function(user) {
+    currentUser = user;
+    webStorage.set('restaurantUser', currentUser);
+    $rootScope.$emit('userChange', currentUser);
+  };
 
-    var loginFailure = function () {
-        currentUser = undefined
-        delete $rootScope.currentUser;
-    };
+  var loginSuccess = function (response) {
+    setCurrentUser({
+      username: response.data.username,
+      roles: response.data.roles,
+      token: response.data['access_token']
+    });
+  };
 
-    service.login = function (username, password) {
-        var loginPayload = {username: username, password: password};
-        return $http.post('/api/login', loginPayload).then(loginSuccess, loginFailure);
-    };
+  var loginFailure = function () {
+    setCurrentUser(undefined);
+  };
 
-    service.currentUser = function () {
-        return currentUser;
-    };
+  service.login = function (username, password) {
+    var loginPayload = {username: username, password: password};
+    return $http.post('/api/login', loginPayload).then(loginSuccess, loginFailure);
+  };
 
-    return service;
+  service.currentUser = function () {
+    return currentUser;
+  };
+
+  setCurrentUser(webStorage.get('restaurantUser'));
+
+  return service;
 }]);

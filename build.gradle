@@ -122,6 +122,10 @@ bower {
     'angular-resource'('1.5.x') {
         source 'angular-resource.js'
     }
+
+    'angular-webstorage'() {
+        source 'angular-webstorage.js'
+    }
 }
 
 
