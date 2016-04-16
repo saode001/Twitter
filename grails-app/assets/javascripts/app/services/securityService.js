@@ -23,7 +23,7 @@ angular.module('app').factory('securityService', ['$http', '$rootScope', 'webSto
 
   service.login = function (username, password) {
     var loginPayload = {username: username, password: password};
-    return $http.post('/api/login', loginPayload).then(loginSuccess, loginFailure);
+    return $http.post('/login', loginPayload).then(loginSuccess, loginFailure);
   };
 
   service.currentUser = function () {

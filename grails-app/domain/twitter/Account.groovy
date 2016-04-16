@@ -11,6 +11,7 @@ class Account {
     String email
     String password
     String name
+
     boolean enabled = true
     boolean accountExpired = false
     boolean accountLocked = false
@@ -42,7 +43,7 @@ class Account {
     static constraints = {
         handle nullable: false, unique: true
         email nullable: false, email: true, unique: true
-        password nullable: false, matches: /((?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,16})/
+        password nullable: false//, matches: /((?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,16})/
         name nullable: false
 
     }
