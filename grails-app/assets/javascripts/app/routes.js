@@ -8,16 +8,16 @@ angular.module('app')
         templateUrl: '/app/login.html',
         controller: 'loginController'
       })
-      .when('/home/:handle?', {
+     /* .when('/home/:handle?', {
         templateUrl: '/app/home.html',
         controller: 'homeController'
-      })
+      })*/
       .when('/feed', {
         templateUrl: '/app/feed.html',
         controller: 'feedController'
       })
       .otherwise({
-        redirectTo: '/feed'
+        redirectTo: '/login'
       })
   })
     

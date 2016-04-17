@@ -1,7 +1,7 @@
 angular.module('app').controller('feedController', function ($resource, $scope) {
 
-  var Restaurant = $resource('/api/restaurants/:restaurantId', {restaurantId: '@id'});
+  var Account = $resource('/api/accounts/:accountId/followers', {accountId: '@id'});
 
-  $scope.restaurants = Restaurant.query();
-  
+  $scope.accounts = Account.query();
+
 });
