@@ -9,7 +9,7 @@ angular.module('app').controller('loginController', function($scope, $location, 
         var currentUser = securityService.currentUser();
         if (currentUser) {
           delete $scope.error;
-          $location.path('/feed');
+          $location.path('/search');
         } else {
           $scope.error = 'Invalid login';
         }

@@ -8,13 +8,13 @@ angular.module('app')
         templateUrl: '/app/login.html',
         controller: 'loginController'
       })
-     /* .when('/home/:handle?', {
-        templateUrl: '/app/home.html',
-        controller: 'homeController'
-      })*/
-      .when('/feed', {
-        templateUrl: '/app/feed.html',
-        controller: 'feedController'
+      .when('/app/userDetail/:accountId?', {
+        templateUrl: '/app/userDetail.html',
+        controller: 'userDetailController'
+      })
+      .when('/search', {
+        templateUrl: '/app/search.html',
+        controller: 'searchController'
       })
       .otherwise({
         redirectTo: '/login'
