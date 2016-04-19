@@ -12,6 +12,10 @@ angular.module('app')
         templateUrl: '/app/userDetail.html',
         controller: 'userDetailController'
       })
+        .when('/editAccount', {
+            templateUrl: '/app/editAccount.html',
+            controller: 'userDetailController'
+        })
       .when('/search', {
         templateUrl: '/app/search.html',
         controller: 'searchController'

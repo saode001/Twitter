@@ -2,13 +2,14 @@
     <input type="submit" id="logout" name="logout" ng-click="logout()" class="btn btn-primary" value="Logout"/>
 </div>
 <div ng-controller="searchController" class="container">
-    <div align="center"><h3><a ng-href=""#{{curAccount.name}}</h3></div>
+    <div align="center"><h3><a ng-href="#{{curAccount.name}}"></a></h3></div>
     <div class="container">
         <label>Enter a search term:</label>
         <input ng-model="searchTerm">
     </div>
     <div>
         <input type="submit" id="search" name="search" ng-click="searchMessages(searchTerm)" class="btn btn-primary" value="Search"/>
+
     </div>
     <hr/>
     <div ng-show="messages.length > 0" class="container">

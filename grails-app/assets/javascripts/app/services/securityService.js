@@ -5,7 +5,7 @@ angular.module('app').factory('securityService', ['$http', '$rootScope', 'webSto
 
   var setCurrentUser = function(user) {
     currentUser = user;
-    webStorage.set('restaurantUser', currentUser);
+    webStorage.set('accountUser', currentUser);
     $rootScope.$emit('userChange', currentUser);
   };
 
@@ -30,7 +30,7 @@ angular.module('app').factory('securityService', ['$http', '$rootScope', 'webSto
     return currentUser;
   };
 
-  setCurrentUser(webStorage.get('restaurantUser'));
+  setCurrentUser(webStorage.get('accountUser'));
 
   return service;
 }]);
