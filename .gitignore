@@ -13,3 +13,4 @@ out/
 .classpath
 grails-app/assets/bower
 node_modules/
+.asscache

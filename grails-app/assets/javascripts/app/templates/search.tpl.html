@@ -1,29 +1,18 @@
-<!DOCTYPE html>
-<html>
-    <head>
-        <style>
-            #container { width: 20px;
-                height:20px;
-                         overflow-y: auto; }
-        </style>
-    </head>
-    <body>
-        <div class="row error" ng-show="error">{{ error }}</div>
-        <h1>Search for messages</h1>
-        <div></div>
-        <div>
-            <label>Enter a search term:</label>
-            <input ng-model="searchTerm">
-        </div>
-        <div>
-            <input type="submit" id="search" name="search" ng-click="searchMessages(searchTerm)" class="btn btn-primary" value="Search"/>
-        </div>
-        <div></div>
+<div ng-controller="searchController">
+    <div class="container">
+        <label>Enter a search term:</label>
+        <input ng-model="searchTerm">
+    </div>
+    <div>
+        <input type="submit" id="search" name="search" ng-click="searchMessages(searchTerm)" class="btn btn-primary" value="Search"/>
+    </div>
+    <hr/>
+    <div ng-show="messages.length > 0" class="container">
         <div><h1>Search Results:</h1></div>
         <div style="height: 50px;width:250px;overflow-y: auto">
              <div ng-repeat="m in messages">
-                 <a href="" ng-click="showDetails(/details/{{m.message.account.id}})">{{m.handle}}</a> - {{m.message.messageText}}
+                 <a ng-href="#/userDetail/{{m.message.account.id}}" ng-click="test()">{{m.handle}}</a> - {{m.message.messageText}}
              </div>
         </div>
-    </body>
-</html>
+    </div>
+</div>
