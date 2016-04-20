@@ -1,23 +1,27 @@
 <div ng-controller="logoutController" align="right">
-    <input type="submit" id="logout" name="logout" ng-click="logout()" class="btn btn-primary" value="Logout"/>
+    <input type="submit" id="tLogout" name="logout" ng-click="logout()" class="btn btn-primary" value="Logout"/>
 </div>
 <div ng-controller="searchController" class="container">
-    <div align="center"><h3><a ng-href="#{{curAccount.name}}"></a></h3></div>
+    <div id="tCurrentUser" align="center"><h3><a ng-href="#/userDetail/{{curAccount.id}}">{{curAccount.name}}</a></h3></div>
     <div class="container">
-        <label>Enter a search term:</label>
-        <input ng-model="searchTerm">
+        <label id="searchTermLabel">Enter a search term:</label>
+        <input id="searchTermText" ng-model="searchTerm">
     </div>
     <div>
         <input type="submit" id="search" name="search" ng-click="searchMessages(searchTerm)" class="btn btn-primary" value="Search"/>
 
     </div>
-    <hr/>
-    <div ng-show="messages.length > 0" class="container">
+    <div id="searchResults" ng-show="messages.length > 0" class="container">
         <div><h1>Search Results:</h1></div>
-        <div style="height: 50px;width:250px;overflow-y: auto">
-             <div ng-repeat="m in messages">
-                 <a ng-href="#/userDetail/{{m.message.account.id}}">{{m.handle}}</a> - {{m.message.messageText}}
-             </div>
+            <div style="height: 50px;width:250px;overflow-y: auto">
+                 <div ng-repeat="m in messages">
+                     <div id="message{{m.message.id}}">
+                        <a id="handle{{m.message.id}}" ng-href="#/userDetail/{{m.message.account.id}}">{{m.handle}}</a> - {{m.message.messageText}}
+                 </div>
+            </div>
         </div>
     </div>
 </div>
+<br/>
+<hr/>
+<br/>

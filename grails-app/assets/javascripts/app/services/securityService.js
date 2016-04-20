@@ -1,11 +1,11 @@
-angular.module('app').factory('securityService', ['$http', '$rootScope', 'webStorage', function ($http, $rootScope, webStorage) {
+angular.module('app').factory('securityService', ['$http', '$rootScope', '$location', function ($http, $rootScope, $location) {
+  var loggedOut = false;
   var service = {};
 
   var currentUser;
 
   var setCurrentUser = function(user) {
     currentUser = user;
-    webStorage.set('accountUser', currentUser);
     $rootScope.$emit('userChange', currentUser);
   };
 
@@ -26,11 +26,20 @@ angular.module('app').factory('securityService', ['$http', '$rootScope', 'webSto
     return $http.post('/api/login', loginPayload).then(loginSuccess, loginFailure);
   };
 
+  service.logout = function (){
+    currentUser = undefined;
+    delete $rootScope.currentUser;
+    loggedOut = true;
+    $location.path('#/login?logout=1');
+  };
+
   service.currentUser = function () {
     return currentUser;
   };
 
-  setCurrentUser(webStorage.get('accountUser'));
+  service.loggedOut = function() {
+    return loggedOut;
+  };
 
   return service;
 }]);
