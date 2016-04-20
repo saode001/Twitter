@@ -1,0 +1,24 @@
+<div id="editAccount" ng-conroller="editAccount" class="container">
+    <div ng-controller="logoutController" align="right">
+        <input type="submit" id="logout" name="logout" ng-click="logout()" class="btn btn-primary" value="Logout"/>
+    </div>
+    <label>Current logged in user</label>
+    <div>Username:{{editAccount.name}}</div>
+    <div id="emailDiv"> Email : {{editAccount.email}} </div>
+    <label>Update email address and hit Save : </label>
+    <input id="email-input" ng-model="updateEmail"/>
+    <div ng-controller="editAccountController" align="right">
+        <input type="submit" id="save" name="save" ng-click="save(updateEmail)" class="btn btn-primary" value="save"/>
+    </div>
+ </div>
+
+
+
+
+
+
+
+
+
+
+
