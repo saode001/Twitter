@@ -8,10 +8,11 @@
     </style>
 </head>
 <body>
-<div ng-controller="logoutController" align="right">
-    <input type="submit" id="logout" name="logout" ng-click="logout()" class="btn btn-primary" value="Logout"/>
+<div class="container">
+    <div ng-include src="'/app/search.html'"></div>
 </div>
 <div ng-controller="userDetailController">
+    <div id="pageHeader" align="center"><h3>{{userDetails.name}}'s User Details</h3></div>
     <label> Logged In User</label>
     <div>Username:{{curAccount.name}}</div>
     <div ng-controller="editAccountController" align="right">
