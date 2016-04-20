@@ -8,7 +8,31 @@
     </style>
 </head>
 <body>
+<div ng-controller="logoutController" align="right">
+    <input type="submit" id="logout" name="logout" ng-click="logout()" class="btn btn-primary" value="Logout"/>
+</div>
+<div ng-controller="userDetailController">
+    <label> Logged In User</label>
+    <div>Username:{{curAccount.name}}</div>
+    <div ng-controller="editAccountController" align="right">
+        <input type="submit" id="edit" name="edit" ng-click="edit()" class="btn btn-primary" value="Edit logged in user"/>
+    </div>
 
+    <label> User </label>
+    <div>Username:{{userDetails.name}}</div>
+    <div>Email:{{userDetails.email}}</div>
+    <label> following or not following </label>
+    <div>Let me know : {{followers}}</div>
+</div>
+
+<!--
+<div ng-conroller="curAccount" class="container">
+    <div><h1>Logged In User</h1></div>
+    <div>Username:{{curAccount.name}}</div>
+</div>
+<div ng-controller="editAccountController" align="right">
+    <input type="submit" id="edit" name="edit" ng-click="edit()" class="btn btn-primary" value="Edit logged in user"/>
+</div>
 
 
 <div ng-conroller="userDetail" class="container">
@@ -18,6 +42,11 @@
 
 </div>
 
+<div ng-conroller="followOrNot" class="container">
+    <div><h1>FollowOrNot</h1></div>
+    <div>Let me know:{{followOrNot}}</div>
+</div>
+-->
 
 <div><h1>User's Posting:</h1></div>
 <div style="height: 50px;width:250px;overflow-y: auto">

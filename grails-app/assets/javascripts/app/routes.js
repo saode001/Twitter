@@ -14,7 +14,7 @@ angular.module('app')
       })
         .when('/editAccount', {
             templateUrl: '/app/editAccount.html',
-            controller: 'userDetailController'
+            controller: 'editAccountController'
         })
       .when('/search', {
         templateUrl: '/app/search.html',
