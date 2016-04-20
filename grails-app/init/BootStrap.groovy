@@ -17,6 +17,11 @@ class BootStrap {
         admin.addToFollower(Pres2)
         admin.save(flush: true, failOnError: true)
 
+
+        //Pres2.addToFollower(admin)
+        //Pres2.save(flush: true, failOnError: true)
+
+
         def Pres3 = new Account(handle: 'Pres3', email: 'Thomas.Jefferson@whitehouse.gov', password: 'Password1', name: 'Thomas Jefferson', following: admin)
         role = new Role(authority: 'ROLE_READ').save(flush: true, failOnError: true)
         new UserRole(user: Pres3, role: role).save(flush: true, failOnError: true)
@@ -24,10 +29,19 @@ class BootStrap {
         admin.addToFollower(Pres3)
         admin.save(flush: true, failOnError: true)
 
+        //Pres2.addToFollower(admin);
+        //Pres2.save(flush: true, failOnErro: true)
+
         Pres3.addToFollower(admin)
         Pres3.save(flush: true, failOnError: true)
         admin.addToFollowing(Pres3)
         admin.save(flush: true, failOnError:true)
+
+        //Pres2.addToFollower(admin);
+        //Pres2.save(flush: true, failOnErro: true)
+        Pres2.addToFollower(Pres3);
+        Pres2.save(flush: true, failOnErro: true)
+
 
         def msg = new Message(messageText: 'I am John Adams',account:Pres2).save(flush: true,failOnError: true)
         msg = new Message(messageText: 'Call me Johnny',account:Pres2).save(flush: true,failOnError: true)
