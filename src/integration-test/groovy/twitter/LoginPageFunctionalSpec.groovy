@@ -6,7 +6,6 @@ import geb.spock.*
 import spock.lang.Ignore
 
 @Integration
-@Ignore
 class LoginPageFunctionalSpec extends GebSpec {
 
     def 'L1: When not logged in, route user to the login screen'() {

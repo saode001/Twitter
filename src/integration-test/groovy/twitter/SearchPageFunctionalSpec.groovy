@@ -23,30 +23,21 @@ class SearchPageFunctionalSpec extends GebSpec {
         then:
         sleep(1000)
         $("#tLogout").displayed
-        sleep(1000)
         $("#searchTermLabel").displayed
-        sleep(1000)
         $("#searchTermText").displayed
-        sleep(1000)
         $("#search").displayed
 
         //N1: User’s detail page
-        sleep(1000)
         $("#tCurrentUser").text() == "George Washington"
         //N2: Search box
-        sleep(1000)
         $("#searchTermLabel").displayed
-        sleep(1000)
         $("#searchTermText").displayed
-        sleep(1000)
         $("#search").displayed
         // N3: Logout
-        sleep(1000)
         $('#tLogout').displayed
 
         when:
         //N3: Logout - clicking this should bring you to the login screen and provide a helpful message ‘Sorry to see you go… etc’
-        sleep(1000)
         $("#tLogout").click()
 
         then:
@@ -72,30 +63,21 @@ class SearchPageFunctionalSpec extends GebSpec {
         then:
         sleep(1000)
         $("#searchResults").displayed
-        sleep(1000)
         $("#handle1").text() == "Pres2"
-        sleep(1000)
         $("#handle2").text() == "Pres2"
-        sleep(1000)
         $("#handle3").text() == "Pres2"
 
         //N1: User’s detail page
-        sleep(1000)
         $("#tCurrentUser").text() == "George Washington"
         //N2: Search box
-        sleep(1000)
         $("#searchTermLabel").displayed
-        sleep(1000)
         $("#searchTermText").displayed
-        sleep(1000)
         $("#search").displayed
         // N3: Logout
-        sleep(1000)
         $('#tLogout').displayed
 
         when:
         //N3: Logout - clicking this should bring you to the login screen and provide a helpful message ‘Sorry to see you go… etc’
-        sleep(1000)
         $("#tLogout").click()
 
         then:
@@ -129,22 +111,16 @@ class SearchPageFunctionalSpec extends GebSpec {
         $("#message3",text:iContains("I respond to John, Johnny, or Jojo")).size() == 1
 
         //N1: User’s detail page
-        sleep(1000)
         $("#tCurrentUser").text() == "George Washington"
         //N2: Search box
-        sleep(1000)
         $("#searchTermLabel").displayed
-        sleep(1000)
         $("#searchTermText").displayed
-        sleep(1000)
         $("#search").displayed
         // N3: Logout
-        sleep(1000)
         $('#tLogout').displayed
 
         when:
         //N3: Logout - clicking this should bring you to the login screen and provide a helpful message ‘Sorry to see you go… etc’
-        sleep(1000)
         $("#tLogout").click()
 
         then:
@@ -172,25 +148,19 @@ class SearchPageFunctionalSpec extends GebSpec {
 
         then:
         sleep(1000)
-        $("#pageHeader").text() == "John Adams's User Details"
+        $("#pageHeader").text() == "Pres2's User Details"
 
         //N1: User’s detail page
-        sleep(1000)
         $("#tCurrentUser").text() == "George Washington"
         //N2: Search box
-        sleep(1000)
         $("#searchTermLabel").displayed
-        sleep(1000)
         $("#searchTermText").displayed
-        sleep(1000)
         $("#search").displayed
         // N3: Logout
-        sleep(1000)
         $('#tLogout').displayed
 
         when:
         //N3: Logout - clicking this should bring you to the login screen and provide a helpful message ‘Sorry to see you go… etc’
-        sleep(1000)
         $("#tLogout").click()
 
         then:

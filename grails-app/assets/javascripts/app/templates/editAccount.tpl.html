@@ -1,14 +1,13 @@
-<div id="editAccount" ng-conroller="editAccount" class="container">
-    <div ng-controller="logoutController" align="right">
-        <input type="submit" id="logout" name="logout" ng-click="logout()" class="btn btn-primary" value="Logout"/>
-    </div>
-    <label>Current logged in user</label>
-    <div>Username:{{editAccount.name}}</div>
-    <div id="emailDiv"> Email : {{editAccount.email}} </div>
-    <label>Update email address and hit Save : </label>
-    <input id="email-input" ng-model="updateEmail"/>
-    <div ng-controller="editAccountController" align="right">
-        <input type="submit" id="save" name="save" ng-click="save(updateEmail)" class="btn btn-primary" value="save"/>
+<div class="container">
+    <div ng-include src="'/app/search.html'"></div>
+    <div id="editAccount" ng-conroller="editAccount" class="container">
+    <label>Enter the new user information</label>
+    <br/>
+    <div id="nameDiv">Username: <input id="name-input" ng-model="updateName" placeholder="{{editAccount.name}}" style="width:400px"/></div>
+    <div id="emailDiv"> Email : <input id="email-input" ng-model="updateEmail" placeholder="{{editAccount.email}}" style="width:400px"/></div>
+
+    <div ng-controller="editAccountController" align="center">
+        <input type="submit" id="save" name="save" ng-click="save(updateName,updateEmail)" class="btn btn-primary" value="save"/>
     </div>
  </div>
 

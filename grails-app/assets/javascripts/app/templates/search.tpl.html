@@ -2,7 +2,7 @@
     <input type="submit" id="tLogout" name="logout" ng-click="logout()" class="btn btn-primary" value="Logout"/>
 </div>
 <div ng-controller="searchController" class="container">
-    <div id="tCurrentUser" align="center"><h3><a ng-href="#/userDetail/{{curAccount.id}}">{{curAccount.name}}</a></h3></div>
+    <div id="tCurrentUser" align="center"><h3><a id="tCurrentUserLink" ng-href="#/userDetail/{{curAccount.id}}">{{curAccount.name}}</a></h3></div>
     <div class="container">
         <label id="searchTermLabel">Enter a search term:</label>
         <input id="searchTermText" ng-model="searchTerm">
@@ -13,11 +13,19 @@
     </div>
     <div id="searchResults" ng-show="messages.length > 0" class="container">
         <div><h1>Search Results:</h1></div>
-            <div style="height: 50px;width:250px;overflow-y: auto">
-                 <div ng-repeat="m in messages">
-                     <div id="message{{m.message.id}}">
-                        <a id="handle{{m.message.id}}" ng-href="#/userDetail/{{m.message.account.id}}">{{m.handle}}</a> - {{m.message.messageText}}
-                 </div>
+            <div style="height: 100px;overflow-y: auto">
+                <table border="1" cellspacing="0" cellpadding="0">
+                    <tr>
+                        <td>Date</td>
+                        <td>Poster</td>
+                        <td>Message</td>
+                    </tr>
+                    <tr ng-repeat="m in messages">
+                        <td ng-bind="m.message.dateCreated | date: 'MM/dd/yyyy'"></td>
+                        <td><a id="handle{{m.message.id}}" ng-href="#/userDetail/{{m.message.account.id}}">{{m.handle}}</a></td>
+                        <td id="message{{m.message.id}}">{{m.message.messageText}}</td>
+                    </tr>
+                </table>
             </div>
         </div>
     </div>

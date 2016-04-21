@@ -30,7 +30,7 @@ class BootStrap {
         admin.save(flush: true, failOnError: true)
 
         //Pres2.addToFollower(admin);
-        //Pres2.save(flush: true, failOnErro: true)
+        //Pres2.save(flush: true, failOnError: true)
 
         Pres3.addToFollower(admin)
         Pres3.save(flush: true, failOnError: true)
@@ -38,9 +38,9 @@ class BootStrap {
         admin.save(flush: true, failOnError:true)
 
         //Pres2.addToFollower(admin);
-        //Pres2.save(flush: true, failOnErro: true)
+        //Pres2.save(flush: true, failOnError: true)
         Pres2.addToFollower(Pres3);
-        Pres2.save(flush: true, failOnErro: true)
+        Pres2.save(flush: true, failOnError: true)
 
 
         def msg = new Message(messageText: 'I am John Adams',account:Pres2).save(flush: true,failOnError: true)

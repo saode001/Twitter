@@ -1,7 +1,7 @@
 /**
  * Created by Priyanka on 4/19/2016.
  */
-angular.module('app').controller('editAccountController', function ($resource, $scope, securityService, $location) {
+angular.module('app').controller('editAccountController', function ($http, $resource, $scope, securityService, $location) {
 
     var currentUser = securityService.currentUser();
     var Account = $resource('/api/accounts/:handle',{handle: currentUser.username});
@@ -13,19 +13,17 @@ angular.module('app').controller('editAccountController', function ($resource, $
         $location.path('/editAccount');
     };
 
-    $scope.save = function(updateEmail) {
-        $scope.error = 'Error updating the email address';
-        console.log(updateEmail);
-        var result = $resource('api/accounts/:accountId?', {email: 'updateEmail'},{
+    $scope.save = function(updateName, updateEmail) {
+        var result = $resource('api/accounts/:accountId', {accountId: $scope.editAccount.id},{
             update: {
                 method: 'PUT',
-                params: {accountId: $scope.editAccount.id, name: $scope.editAccount.name, email: updateEmail},
+                params: {name: updateName, email: updateEmail},
                 headers: {'X-Auth-Token': currentUser.token}
             }
         });
         result.update();
-        alert("Email Updated");
-        location.reload();
+        alert("Name and email updated!");
+        $location.path('/userDetail/'+$scope.editAccount.id);
     };
 
 });

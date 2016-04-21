@@ -11,54 +11,35 @@
 <div class="container">
     <div ng-include src="'/app/search.html'"></div>
 </div>
-<div ng-controller="userDetailController">
-    <div id="pageHeader" align="center"><h3>{{userDetails.name}}'s User Details</h3></div>
-    <label> Logged In User</label>
-    <div>Username:{{curAccount.name}}</div>
-    <div>AccountId:{{curAccount.id}}</div>
-    <div ng-controller="editAccountController" align="right">
+<div ng-controller="userDetailController" class="container">
+    <div id="pageHeader" align="center"><h3>{{userDetails.handle}}'s User Details</h3></div>
+    <br/>
+    <div id="userName"><b>Name:</b> {{userDetails.name}}</div>
+    <div id="userEmail"><b>Email:</b> {{userDetails.email}}</div>
+    <div id="userEdit" ng-controller="editAccountController" ng-show="curAccount.id == userDetails.id">
         <input type="submit" id="edit" name="edit" ng-click="edit()" class="btn btn-primary" value="Edit logged in user"/>
     </div>
 
-    <label> User </label>
-    <div>Username:{{userDetails.name}}</div>
-    <div>Email:{{userDetails.email}}</div>
-
-    <div ng-controller="userDetailController" align="right">
-        <input type="submit" id="followCheck" name="edit" ng-click="getFollowStatus(curAccount.id, followers)" class="btn btn-primary" value="Check if following or Not"/>
+    <div id="startFollow" ng-controller="userDetailController" ng-show="curAccount.id != userDetails.id && !alreadyfollowing" align="right">
+        <input type="submit" id="followCheck" name="edit" ng-click="getFollowStatus(curAccount.id, userDetails.id)" class="btn btn-primary" value="Start Following"/>
+    </div>
+    <div id="areFollowing" align="right" ng-show="alreadyfollowing">
+        <label id="following">You are following this user</label>
     </div>
 
 </div>
-
-<!--
-<div ng-conroller="curAccount" class="container">
-    <div><h1>Logged In User</h1></div>
-    <div>Username:{{curAccount.name}}</div>
-</div>
-<div ng-controller="editAccountController" align="right">
-    <input type="submit" id="edit" name="edit" ng-click="edit()" class="btn btn-primary" value="Edit logged in user"/>
-</div>
-
-
-<div ng-conroller="userDetail" class="container">
-    <div><h1>User Details</h1></div>
-    <div>Username:{{userDetails.name}}</div>
-    <div>Email:{{userDetails.email}}</div>
-
-</div>
-
-<div ng-conroller="followOrNot" class="container">
-    <div><h1>FollowOrNot</h1></div>
-    <div>Let me know:{{followOrNot}}</div>
-</div>
--->
-
-<div><h1>User's Posting:</h1></div>
-<div style="height: 50px;width:250px;overflow-y: auto">
-    <div ng-repeat="m in postings ">
-        <div>Date:{{m.dateCreated}}</div>
-        <div>Message: {{m.messageText}}</div>
-    </div>
+<div id="postingLabel"><h1>User's Posting:</h1></div>
+<div style="height: 200px;overflow-y: auto">
+    <table border="1" cellpadding="0" cellspacing="0">
+        <tr>
+            <td>Date</td>
+            <td>Message</td>
+        </tr>
+        <tr ng-repeat="m in postings ">
+            <td id="messageDate{{m.id}}" ng-bind="m.dateCreated | date: 'MM/dd/yyyy HH:mm:ss'"></td>
+            <td id="msgText{{m.id}}">{{m.messageText}}</td>
+        </tr>
+    </table>
 </div>
 </body>
 
