@@ -15,37 +15,29 @@ class LoginPageFunctionalSpec extends GebSpec {
         then:
         $("#tUsername").displayed
         $("#tPassword").displayed
-
     }
 
     def 'L2: Login screen allows a user to enter username and password to gain access' () {
         when:
         go '/'
-        sleep(1000)
-        $("#tUsername").value("Pres1")
-        sleep(1000)
-        $("#tPassword").value("Password1")
-        sleep(1000)
+
+        waitFor { $("#tUsername").value("Pres1") }
+        waitFor { $("#tPassword").value("Password1") }
         $("#tLogin").click()
-        sleep(1000)
 
         then:
-        $('#tLogout').displayed
+        waitFor { $('#tLogout').displayed }
     }
 
     def 'L3: Invalid login will be rejected with an error message' () {
         when:
         go '/'
-        sleep(1000)
         $("#tUsername").value("George")
-        sleep(1000)
         $("#tPassword").value("Washtington")
-        sleep(1000)
         $("#tLogin").click()
-        sleep(1000)
 
         then:
-        $("#loginError").text() == 'Invalid login'
+        waitFor { $("#loginError").text() == 'Invalid login' }
         $("#tUsername").displayed
         $("#tPassword").displayed
     }
