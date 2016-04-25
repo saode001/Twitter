@@ -8,32 +8,25 @@ import spock.lang.Ignore
 
 @Integration
 
-class userDetailFunctionalspec extends GebSpec {
+class UserDetailFunctionalspec extends GebSpec {
     def setup(){
         when:
         go'/'
-        sleep(1000)
-        $("#tUsername").value("Pres1")
+        waitFor { $("#tUsername").value("Pres1") }
         $("#tPassword").value("Password1")
         $("#tLogin").click()
-        sleep(1000)
-
     }
-
 
     def 'U1: User’s detail page will display the user’s name as well as a scrollable list of that user’s postings'(){
 
         when:
-        $("#searchTermText").value("John")
-        sleep(1000)
-        $("#search").click()
+        waitFor { $("#searchTermText").value("John") }
+        waitFor { $("#search").click() }
 
-        sleep(1000)
-        $("#handle1").click()
+        waitFor { $("#handle1").click() }
 
         then:
-        sleep(1000)
-        $("#pageHeader").text() == "Pres2's User Details"
+        waitFor { $("#pageHeader").text() == "Pres2's User Details" }
         // User name and email
         $("#userName").text() == "Name: John Adams"
         $("#userEmail").text() == "Email: John.Adams@whitehouse.gov"
@@ -53,15 +46,12 @@ class userDetailFunctionalspec extends GebSpec {
 
     def 'U2: User’s detail page will provide a way for the logged in user to follow the detail user'(){
         when:
-        $("#searchTermText").value("John")
-        sleep(1000)
+        waitFor { $("#searchTermText").value("John") }
         $("#search").click()
-        sleep(1000)
-        $("#handle1").click()
+        waitFor { $("#handle1").click() }
 
         then:
-        sleep(1000)
-        $("#pageHeader").text() == "Pres2's User Details"
+        waitFor { $("#pageHeader").text() == "Pres2's User Details" }
         // User name and email
         $("#userName").text() == "Name: John Adams"
         $("#userEmail").text() == "Email: John.Adams@whitehouse.gov"
@@ -69,13 +59,12 @@ class userDetailFunctionalspec extends GebSpec {
 
         when:
         $('#followCheck').click()
-        sleep(1000)
-        driver.switchTo().alert().accept() // click OK to message
+        def alert = waitFor 5, { driver.switchTo().alert() } // click OK to message
+        alert.accept()
 
         then:
-        sleep(1000)
-        $('#followCheck').displayed == false;
-        $('#areFollowing').displayed
+        waitFor { !$('#followCheck').displayed }
+        waitFor { $('#areFollowing').displayed }
 
         //N1: User’s detail page
         $("#tCurrentUser").text() == "George Washington"
@@ -88,26 +77,21 @@ class userDetailFunctionalspec extends GebSpec {
 
         when:
         //N3: Logout - clicking this should bring you to the login screen and provide a helpful message ‘Sorry to see you go… etc’
-        sleep(1000)
-        $("#tLogout").click()
+        waitFor { $("#tLogout").click() }
 
         then:
-        sleep(1000)
-        $("#logoutMsg").displayed
+        waitFor { $("#logoutMsg").displayed }
     }
 
     def 'U3: When the logged in user is following the detail user, the detail page will display a message or icon indicating this'() {
         when:
-        $("#searchTermText").value("I")
-        sleep(1000)
+        waitFor { $("#searchTermText").value("I") }
         $("#search").click()
 
-        sleep(1000)
-        $("#handle5").click()
+        waitFor { $("#handle5").click() }
 
         then:
-        sleep(1000)
-        $("#pageHeader").text() == "Pres3's User Details"
+        waitFor { $("#pageHeader").text() == "Pres3's User Details" }
         // User name and email
         $("#userName").text() == "Name: Thomas Jefferson"
         $("#userEmail").text() == "Email: Thomas.Jefferson@whitehouse.gov"
@@ -117,35 +101,28 @@ class userDetailFunctionalspec extends GebSpec {
         $('#areFollowing').text() == "You are following this user"
 
         //N1: User’s detail page
-        sleep(1000)
-        $("#tCurrentUser").text() == "George Washington"
+        waitFor { $("#tCurrentUser").text() == "George Washington" }
         //N2: Search box
-        sleep(1000)
-        $("#searchTermLabel").displayed
+        waitFor { $("#searchTermLabel").displayed }
         $("#searchTermText").displayed
         $("#search").displayed
         // N3: Logout
-        sleep(1000)
-        $('#tLogout').displayed
+        waitFor { $('#tLogout').displayed }
 
         when:
         //N3: Logout - clicking this should bring you to the login screen and provide a helpful message ‘Sorry to see you go… etc’
-        sleep(1000)
-        $("#tLogout").click()
+        waitFor { $("#tLogout").click() }
 
         then:
-        sleep(1000)
-        $("#logoutMsg").displayed
+        waitFor { $("#logoutMsg").displayed }
     }
 
     def 'U4: When the logged in user goes to their own detail page, they can edit their name and email'() {
         when:
-        sleep(1000)
-        $("#tCurrentUserLink").click()
+        waitFor { $("#tCurrentUserLink").click() }
 
         then:
-        sleep(1000)
-        $("#pageHeader").text() == "Pres1's User Details"
+        waitFor { $("#pageHeader").text() == "Pres1's User Details" }
         // User name and email
         $("#userName").text() == "Name: George Washington"
         $("#userEmail").text() == "Email: George.Washington@whitehouse.gov"
@@ -155,22 +132,19 @@ class userDetailFunctionalspec extends GebSpec {
         $("#edit").click()
 
         then:
-        sleep(1000)
-        $("#name-input").displayed
+        waitFor { $("#name-input").displayed }
         $("#email-input").displayed
 
         when:
         $("#name-input").value("G. Washington")
-        sleep(1000)
-        $("#email-input").value("g.washington@whitehouse.gov")
-        sleep(1000)
-        $("#save").click()
+        waitFor { $("#email-input").value("g.washington@whitehouse.gov") }
+        waitFor { $("#save").click() }
 
         then:
-        sleep(1000)
-        driver.switchTo().alert().accept() // click OK to message
-        sleep(1000)
-        $("#pageHeader").displayed
+        def alert = waitFor 5, { driver.switchTo().alert() } // click OK to message
+        alert.accept()
+
+        waitFor { $("#pageHeader").displayed }
         // User name and email
         $("#userName")displayed
         $("#userEmail").displayed
@@ -180,14 +154,11 @@ class userDetailFunctionalspec extends GebSpec {
         //N2: Search box
         $("#searchTermText").value("John")
         $("#search").click()
-        sleep(1000)
-        $("#handle1").click()
-        sleep(1000)
-        $("#tCurrentUserLink").click()
+        waitFor { $("#handle1").click() }
+        waitFor { $("#tCurrentUserLink").click() }
 
         then:
-        sleep(1000)
-        $("#pageHeader").text() == "Pres1's User Details"
+        waitFor { $("#pageHeader").text() == "Pres1's User Details" }
         // User name and email
         $("#userName").text() == "Name: G. Washington"
         $("#userEmail").text() == "Email: g.washington@whitehouse.gov"
@@ -196,12 +167,10 @@ class userDetailFunctionalspec extends GebSpec {
 
     def 'Edit user has search, logged in user detail, and logout navigation'(){
         when:
-        sleep(1000)
-        $("#tCurrentUserLink").click()
+        waitFor { $("#tCurrentUserLink").click() }
 
         then:
-        sleep(1000)
-        $("#pageHeader").text() == "Pres1's User Details"
+        waitFor { $("#pageHeader").text() == "Pres1's User Details" }
         // User name and email
         $("#userName").text() == "Name: G. Washington"
         $("#userEmail").text() == "Email: g.washington@whitehouse.gov"
@@ -211,29 +180,23 @@ class userDetailFunctionalspec extends GebSpec {
         $("#edit").click()
 
         then:
-        sleep(1000)
-        $("#name-input").displayed
+        waitFor { $("#name-input").displayed }
         $("#email-input").displayed
 
         //N1: User’s detail page
-        sleep(1000)
-        $("#tCurrentUser").text() == "G. Washington"
+        waitFor { $("#tCurrentUser").text() == "G. Washington" }
         //N2: Search box
-        sleep(1000)
-        $("#searchTermLabel").displayed
+        waitFor { $("#searchTermLabel").displayed }
         $("#searchTermText").displayed
         $("#search").displayed
         // N3: Logout
-        sleep(1000)
-        $('#tLogout').displayed
+        waitFor { $('#tLogout').displayed }
 
         when:
         //N3: Logout - clicking this should bring you to the login screen and provide a helpful message ‘Sorry to see you go… etc’
-        sleep(1000)
-        $("#tLogout").click()
+        waitFor { $("#tLogout").click() }
 
         then:
-        sleep(1000)
-        $("#logoutMsg").displayed
+        waitFor { $("#logoutMsg").displayed }
     }
 }
