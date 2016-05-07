@@ -2,6 +2,9 @@ package twitter
 import geb.spock.GebSpec
 import grails.test.mixin.integration.Integration
 import spock.lang.Ignore
+
+import java.text.SimpleDateFormat
+
 /**
  * Created by Priyanka on 4/19/2016.
  */
@@ -21,7 +24,7 @@ class userDetailFunctionalspec extends GebSpec {
     }
 
 
-    def 'U1: User’s detail page will display the user’s name as well as a scrollable list of that user’s postings'(){
+    def 'U1 and R5: User’s detail page will display the user’s name as well as a scrollable list of that user’s postings'(){
 
         when:
         $("#searchTermText").value("John")
@@ -40,7 +43,7 @@ class userDetailFunctionalspec extends GebSpec {
 
         //scrollable list of postings
         $("#postingLabel").text() == "User's Posting:"
-        $('#messageDate4').displayed
+        $("#messageDate4").text()== "May 6"
         $('#msgText4').text() == "Hello Everyone!"
         $('#messageDate3').displayed
         $('#msgText3').text() == "I respond to John, Johnny, or Jojo"
@@ -50,6 +53,13 @@ class userDetailFunctionalspec extends GebSpec {
         $('#msgText1').text() == "I am John Adams"
 
     }
+
+
+
+
+
+
+
 
     def 'U2: User’s detail page will provide a way for the logged in user to follow the detail user'(){
         when:
