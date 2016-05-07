@@ -20,6 +20,10 @@ angular.module('app')
         templateUrl: '/app/search.html',
         controller: 'searchController'
       })
+      .when('/message',{
+        templateUrl: '/app/message.html',
+        controller: 'messageController'
+      })
       .when('/logout',{
         templateUrl: '',
         controller: 'logoutController'

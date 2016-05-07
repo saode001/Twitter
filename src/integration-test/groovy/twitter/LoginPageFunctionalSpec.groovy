@@ -13,6 +13,7 @@ class LoginPageFunctionalSpec extends GebSpec {
         go '/'
 
         then:
+        sleep(1000);
         $("#tUsername").displayed
         $("#tPassword").displayed
 

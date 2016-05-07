@@ -1,0 +1,17 @@
+<div class="container" style="width: 960px;" align="left">
+    <div ng-include src="'/app/search.html'"></div>
+</div>
+<form name="messages">
+    <div ng-controller="messageController" class="container">
+        <div class="container">
+            <label id="newMessageLabel">Enter your message:</label>
+            <textarea id="msgText" name="msgText" ng-model="msgText" ng-maxlength="40" required></textarea>
+            <span ng-show="messages.msgText.$touched && messages.msgText.$invalid && !messages.msgText.$dirty" id="requiredError">The message is required.</span>
+            <span ng-show="messages.msgText.$touched && messages.msgText.$invalid && messages.msgText.$dirty" id="lengthError">The message cannot be over forty(40) characters.</span>
+        </div>
+        <br/>
+        <div>
+            <input type="submit" id="createMessage" name="createMessage" ng-click="createMessage(msgText)" class="btn btn-primary" value="Submit"/>
+        </div>
+    </div>
+</form>

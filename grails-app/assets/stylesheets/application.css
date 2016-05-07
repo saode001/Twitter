@@ -9,8 +9,8 @@
 *
 *= require main
 *= require mobile
-*= require_self
 *= require ../bower/angular/angular-csp.css
 *= require ../bower/bootstrap/css/bootstrap.css
 *= require ../bower/bootstrap/css/bootstrap-theme.css
+*= require_self
 */

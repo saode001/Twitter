@@ -1,27 +1,18 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <style>
-        #container { width: 20px;
-            height:20px;
-            overflow-y: auto; }
-    </style>
 </head>
 <body>
-<div class="container">
+<div class="container" style="width: 960px;" align="left">
     <div ng-include src="'/app/search.html'"></div>
 </div>
-<div ng-controller="userDetailController" class="container">
+<div ng-controller="userDetailController" class="container" style="width: 900px;">
     <div id="pageHeader" align="center"><h3>{{userDetails.handle}}'s User Details</h3></div>
     <br/>
     <div id="userName"><b>Name:</b> {{userDetails.name}}</div>
     <div id="userEmail"><b>Email:</b> {{userDetails.email}}</div>
     <div id="userEdit" ng-controller="editAccountController" ng-show="curAccount.id == userDetails.id">
         <input type="submit" id="edit" name="edit" ng-click="edit()" class="btn btn-primary" value="Edit logged in user"/>
-    </div>
-
-    <div id="userMessage" ng-controller="editAccountController" ng-show="curAccount.id == userDetails.id">
-        <input type="submit" id="message" name="edit" ng-click="edit()" class="btn btn-primary" value="Post message"/>
     </div>
 
    <!-- <div id="startFollow" ng-controller="userDetailController" ng-show="curAccount.id != userDetails.id && !alreadyfollowing" align="right">
@@ -33,9 +24,9 @@
     <follow-directive/>
 
 </div>
-<div id="postingLabel"><h1>User's Posting:</h1></div>
-<div style="height: 200px;overflow-y: auto">
-    <table border="1" cellpadding="0" cellspacing="0">
+<div id="postingLabel" style="width: 960px;"><h1>User's Posting:</h1></div>
+<div style="height: 200px;width:960px;overflow-y: auto">
+    <table border="1" cellpadding="0" cellspacing="0" width="960px">
         <tr>
             <td>Date</td>
             <td>Message</td>

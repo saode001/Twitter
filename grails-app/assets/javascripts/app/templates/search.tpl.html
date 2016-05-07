@@ -1,20 +1,29 @@
-<div ng-controller="logoutController" align="right">
+<div ng-controller="logoutController" align="right" style="width:900px">
     <input type="submit" id="tLogout" name="logout" ng-click="logout()" class="btn btn-primary" value="Logout"/>
 </div>
-<div ng-controller="searchController" class="container">
-    <div id="tCurrentUser" align="center"><h3><a id="tCurrentUserLink" ng-href="#/userDetail/{{curAccount.id}}">{{curAccount.name}}</a></h3></div>
+<div id="tCurrentUser" align="center" ng-controller="searchController" class="container" style="width:900px">
+    <h3><a id="tCurrentUserLink" ng-href="#/userDetail/{{curAccount.id}}">{{curAccount.name}}</a></h3>
+</div>
+<br/>
+<div ng-controller="searchController" class="container" style="width:900px">
+    <uib-alert id="alert$index" ng-repeat="alert in alerts" type="{{alert.type}}" close="closeAlert($index)">{{alert.msg}}</uib-alert>
+</div>
+<div ng-controller="searchController" class="container" style="width:900px" align="left">
     <div class="container">
         <label id="searchTermLabel">Enter a search term:</label>
         <input id="searchTermText" ng-model="searchTerm">
     </div>
     <div>
         <input type="submit" id="search" name="search" ng-click="searchMessages(searchTerm)" class="btn btn-primary" value="Search"/>
-
     </div>
-    <div id="searchResults" ng-show="messages.length > 0" class="container">
+    <div>
+        <br/>
+        <input type="button" id="newMessage" name="newMessage" ng-click="addNewMessage()" class="btn btn-primary" value="Create New Message"/>
+    </div>
+    <div id="searchResults" ng-show="messages.length > 0" class="container" style="width:900px">
         <div><h1>Search Results:</h1></div>
-            <div style="height: 100px;overflow-y: auto">
-                <table border="1" cellspacing="0" cellpadding="0">
+            <div style="height: 100px;width: 900px;overflow-y: auto">
+                <table border="1" cellspacing="0" cellpadding="0" width="900px">
                     <tr>
                         <td>Date</td>
                         <td>Poster</td>

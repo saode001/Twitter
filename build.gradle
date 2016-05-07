@@ -8,45 +8,34 @@ buildscript {
     }
     dependencies {
         classpath "org.grails:grails-gradle-plugin:$grailsVersion"
-        classpath 'com.bertramlabs.plugins:asset-pipeline-gradle:2.5.0'
-        classpath "org.grails.plugins:hibernate:4.3.10.5"
+        classpath "com.bertramlabs.plugins:asset-pipeline-gradle:2.5.0"
+        classpath "org.grails.plugins:hibernate4:5.0.0"
     }
 }
 
 plugins {
     id "io.spring.dependency-management" version "0.5.4.RELEASE"
     id 'com.craigburke.bower-installer' version '2.5.1'
+    id 'com.craigburke.karma' version '1.4.3'
 }
 
-//plugins {
-//  id "io.spring.dependency-management" version "0.5.4.RELEASE"
-//}
 
 version "0.1"
-group "twitter"
+group "Twitter"
 
-apply plugin: "spring-boot"
-apply plugin: "war"
-apply plugin: "asset-pipeline"
-apply plugin: 'eclipse'
-apply plugin: 'idea'
-apply plugin: "org.grails.grails-web"
-apply plugin: "org.grails.grails-gsp"
+apply plugin:"spring-boot"
+apply plugin:"eclipse"
+apply plugin:"idea"
+apply plugin:"war"
+apply plugin:"org.grails.grails-web"
+apply plugin:"org.grails.grails-gsp"
+apply plugin:"asset-pipeline"
 
-//plugins {
-//    id "io.spring.dependency-management" version "0.5.4.RELEASE"
-//    id 'com.craigburke.bower-installer' version '2.5.1'
-//}
 
 ext {
     grailsVersion = project.grailsVersion
     gradleWrapperVersion = project.gradleWrapperVersion
 }
-
-//assets {
-//    minifyJs = true
-//    minifyCss = true
-//}
 
 repositories {
     mavenLocal()
@@ -61,58 +50,56 @@ dependencyManagement {
 }
 
 dependencies {
-    assets "com.craigburke.angular:angular-template-asset-pipeline:2.2.7"
+    assets "com.craigburke.angular:angular-template-asset-pipeline:2.2.7" // might not be necessary
     compile "org.springframework.boot:spring-boot-starter-logging"
-    compile "org.springframework.boot:spring-boot-starter-actuator"
     compile "org.springframework.boot:spring-boot-autoconfigure"
+    compile "org.grails:grails-core"
+    compile "org.springframework.boot:spring-boot-starter-actuator"
     compile "org.springframework.boot:spring-boot-starter-tomcat"
     compile "org.grails:grails-dependencies"
     compile "org.grails:grails-web-boot"
-
-    compile "org.grails.plugins:hibernate"
     compile "org.grails.plugins:cache"
-    compile "org.hibernate:hibernate-ehcache"
     compile "org.grails.plugins:scaffolding"
-
+    compile "org.grails.plugins:hibernate4"
+    compile "org.hibernate:hibernate-ehcache"
+    console "org.grails:grails-console"
     compile 'org.grails.plugins:spring-security-rest:2.0.0.M2'  // Security Related Stuff
     compile 'org.grails.plugins:spring-security-rest-gorm:2.0.0.M2' // Security Related Stuff
-    //profile "org.grails.profiles:web:3.1.1"
+
+    compile group: 'org.seleniumhq.selenium', name: 'selenium-java', version: '2.+'
+
+
+    profile "org.grails.profiles:web:3.1.1"
     runtime "org.grails.plugins:asset-pipeline"
     runtime "com.h2database:h2"
     testCompile "org.grails:grails-plugin-testing"
-    testCompile "org.grails.plugins:geb"
-    testCompile 'org.codehaus.groovy.modules.http-builder:http-builder:0.7'
-    testRuntime "net.sourceforge.htmlunit:htmlunit:2.18"
-    testCompile "com.google.guava:guava:18.0"
 
-    // Note: It is recommended to update to a more robust driver (Chrome, Firefox etc.)
-    testRuntime 'org.seleniumhq.selenium:selenium-htmlunit-driver:2.47.1'
-        console "org.grails:grails-console"
+    testCompile ("org.grails.plugins:geb"){
+        exclude group: 'org.seleniumhq.selenium'
+    }
+    testCompile 'com.google.guava:guava:18.0'
+
+    testRuntime "org.seleniumhq.selenium:selenium-htmlunit-driver:2.47.0"
+    testRuntime "net.sourceforge.htmlunit:htmlunit:2.18"
     testRuntime 'org.seleniumhq.selenium:selenium-firefox-driver:2.53.0'
     testRuntime 'org.seleniumhq.selenium:selenium-chrome-driver:2.53.0'
-
+    testCompile 'org.codehaus.groovy.modules.http-builder:http-builder:0.7'
 }
 
-
 bower {
+
+    installBase = 'grails-app/assets/bower'
+
+    'jquery'('2.2.x') {
+        source 'dist/jquery.js'
+    }
 
     'bootstrap'('3.3.x') {
         source 'dist/css/bootstrap.css' >> 'css/'
         source 'dist/css/bootstrap-theme.css' >> 'css/'
         source 'dist/fonts/**' >> 'fonts/'
         source 'dist/js/bootstrap.js'
-        excludes 'jquery'
-    }
-
-   // 'angular'('1.3.x') {
-    //    source 'angular.js'
-   //     source 'angular-csp.css'
-   // }
-
-
-    'angular'('1.5.x') {
-        source 'angular.js'
-        source 'angular-csp.css'
+     //   excludes 'jquery'
     }
 
     'angular-route'('1.5.x') {
@@ -126,10 +113,20 @@ bower {
     'angular-webstorage'() {
         source 'angular-webstorage.js'
     }
+
+    'angular'('1.5.x') {
+        source 'angular.js'
+        source 'angular-route.js'
+        source 'angular-csp.css'
+    }
+
+    'angular-bootstrap'('1.3.x') {
+        source 'ui-bootstrap.js'
+        source 'ui-bootstrap-tpls.js'
+        source 'ui-bootstrap-csp.css' >> 'css/'
+    }
+
 }
-
-
-
 compileJava.dependsOn bowerInstall
 clean.dependsOn bowerClean
 
@@ -137,13 +134,30 @@ task wrapper(type: Wrapper) {
     gradleVersion = gradleWrapperVersion
 }
 
-
 assets {
     minifyJs = true
     minifyCss = true
-
-
-
-
 }
 
+karma {
+    profile 'default'
+    colors = true
+
+    browsers = ['Chrome']
+    frameworks = ['jasmine']
+    reporters = ['junit', 'progress', 'coverage']
+    preprocessors = [
+            '**/grails-app/assets/javascripts/app/**/*.js': ['coverage']
+    ]
+
+    profile('default') {
+        libraryBases = ['**/grails-app/assets/bower/']
+        libraryFiles = ['**/jquery.js', '**/angular.js', '**/!(jquery|angular).js']
+
+        sourceBases = ['**/grails-app/assets/javascripts/']
+        sourceFiles = ['application.js', 'app/**/*.js']
+
+        testBases = ['**/src/test/javascript/']
+        testFiles = ['*.js']
+    }
+}
