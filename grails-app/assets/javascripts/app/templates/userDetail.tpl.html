@@ -20,12 +20,17 @@
         <input type="submit" id="edit" name="edit" ng-click="edit()" class="btn btn-primary" value="Edit logged in user"/>
     </div>
 
-    <div id="startFollow" ng-controller="userDetailController" ng-show="curAccount.id != userDetails.id && !alreadyfollowing" align="right">
+    <div id="userMessage" ng-controller="editAccountController" ng-show="curAccount.id == userDetails.id">
+        <input type="submit" id="message" name="edit" ng-click="edit()" class="btn btn-primary" value="Post message"/>
+    </div>
+
+   <!-- <div id="startFollow" ng-controller="userDetailController" ng-show="curAccount.id != userDetails.id && !alreadyfollowing" align="right">
         <input type="submit" id="followCheck" name="edit" ng-click="getFollowStatus(curAccount.id, userDetails.id)" class="btn btn-primary" value="Start Following"/>
     </div>
     <div id="areFollowing" align="right" ng-show="alreadyfollowing">
         <label id="following">You are following this user</label>
-    </div>
+    </div> !-->
+    <follow-directive/>
 
 </div>
 <div id="postingLabel"><h1>User's Posting:</h1></div>
@@ -36,7 +41,7 @@
             <td>Message</td>
         </tr>
         <tr ng-repeat="m in postings ">
-            <td id="messageDate{{m.id}}" ng-bind="m.dateCreated | date: 'MM/dd/yyyy HH:mm:ss'"></td>
+            <td id="messageDate{{m.id}}" ng-bind="m.dateCreated | date: 'MMM d'"></td>
             <td id="msgText{{m.id}}">{{m.messageText}}</td>
         </tr>
     </table>
