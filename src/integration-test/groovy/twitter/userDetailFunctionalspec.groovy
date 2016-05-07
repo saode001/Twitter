@@ -9,9 +9,6 @@ import java.text.SimpleDateFormat
 class userDetailFunctionalspec extends GebSpec {
     def setup(){
        when:
-       def date = new Date()
-       SimpleDateFormat dateFormat = new SimpleDateFormat("MMM d");
-
        go'/';
        sleep(1000);
        $("#tUsername").value("Pres1");
@@ -23,6 +20,9 @@ class userDetailFunctionalspec extends GebSpec {
     def 'U1 and R5: User’s detail page will display the user’s name as well as a scrollable list of that user’s postings'(){
 
         when:
+        def date = new Date()
+        SimpleDateFormat dateFormat = new SimpleDateFormat("MMM d");
+
         $("#searchTermText").value("John");
         sleep(1000);
         $("#search").click();
