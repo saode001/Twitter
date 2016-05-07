@@ -2,65 +2,54 @@ package twitter
 import geb.spock.GebSpec
 import grails.test.mixin.integration.Integration
 import spock.lang.Ignore
-
 import java.text.SimpleDateFormat
-
-/**
- * Created by Priyanka on 4/19/2016.
- */
 
 @Integration
 
 class userDetailFunctionalspec extends GebSpec {
     def setup(){
-        when:
-        go'/'
-        sleep(1000)
-        $("#tUsername").value("Pres1")
-        $("#tPassword").value("Password1")
-        $("#tLogin").click()
-        sleep(1000)
+       when:
+       def date = new Date()
+       SimpleDateFormat dateFormat = new SimpleDateFormat("MMM d");
 
+       go'/';
+       sleep(1000);
+       $("#tUsername").value("Pres1");
+       $("#tPassword").value("Password1");
+       $("#tLogin").click();
+       sleep(1000);
     }
-
 
     def 'U1 and R5: User’s detail page will display the user’s name as well as a scrollable list of that user’s postings'(){
 
         when:
-        $("#searchTermText").value("John")
-        sleep(1000)
-        $("#search").click()
+        $("#searchTermText").value("John");
+        sleep(1000);
+        $("#search").click();
 
-        sleep(1000)
-        $("#handle1").click()
+        sleep(1000);
+        $("#handle1").click();
 
         then:
-        sleep(1000)
-        $("#pageHeader").text() == "Pres2's User Details"
+        sleep(1000);
+        $("#pageHeader").text() == "Pres2's User Details";
         // User name and email
-        $("#userName").text() == "Name: John Adams"
-        $("#userEmail").text() == "Email: John.Adams@whitehouse.gov"
+        $("#userName").text() == "Name: John Adams";
+        $("#userEmail").text() == "Email: John.Adams@whitehouse.gov";
 
         //scrollable list of postings
-        $("#postingLabel").text() == "User's Posting:"
-        $("#messageDate4").text()== "May 6"
-        $('#msgText4').text() == "Hello Everyone!"
-        $('#messageDate3').displayed
-        $('#msgText3').text() == "I respond to John, Johnny, or Jojo"
-        $('#messageDate2').displayed
-        $('#msgText2').text() == "Call me Johnny"
-        $('#messageDate1').displayed
-        $('#msgText1').text() == "I am John Adams"
-
+        $("#postingLabel").text() == "User's Posting:";
+        $("#messageDate4").text().trim() == dateFormat.format(date).toString().trim()
+        $('#msgText4').text() == "Hello Everyone!";
+        $('#messageDate3').displayed;
+        $('#msgText3').text() == "I respond to John, Johnny, or Jojo";
+        $('#messageDate2').displayed;
+        $('#msgText2').text() == "Call me Johnny";
+        $('#messageDate1').displayed;
+        $('#msgText1').text() == "I am John Adams";
     }
 
-
-
-
-
-
-
-
+    @Ignore
     def 'U2: User’s detail page will provide a way for the logged in user to follow the detail user'(){
         when:
         $("#searchTermText").value("John")
@@ -106,6 +95,7 @@ class userDetailFunctionalspec extends GebSpec {
         $("#logoutMsg").displayed
     }
 
+    @Ignore
     def 'U3: When the logged in user is following the detail user, the detail page will display a message or icon indicating this'() {
         when:
         $("#searchTermText").value("I")
@@ -148,6 +138,7 @@ class userDetailFunctionalspec extends GebSpec {
         $("#logoutMsg").displayed
     }
 
+    @Ignore
     def 'U4: When the logged in user goes to their own detail page, they can edit their name and email'() {
         when:
         sleep(1000)
@@ -204,6 +195,7 @@ class userDetailFunctionalspec extends GebSpec {
         $("#userEdit").displayed
     }
 
+    @Ignore
     def 'Edit user has search, logged in user detail, and logout navigation'(){
         when:
         sleep(1000)
