@@ -39,7 +39,7 @@ class userDetailFunctionalspec extends GebSpec {
 
         //scrollable list of postings
         $("#postingLabel").text() == "User's Posting:";
-        $("#messageDate4").text().trim() == dateFormat.format(date).toString().trim()
+        $("#messageDate4").text().trim() == dateFormat.format(date).toString().trim() // test new date format
         $('#msgText4').text() == "Hello Everyone!";
         $('#messageDate3').displayed;
         $('#msgText3').text() == "I respond to John, Johnny, or Jojo";
@@ -49,7 +49,6 @@ class userDetailFunctionalspec extends GebSpec {
         $('#msgText1').text() == "I am John Adams";
     }
 
-    @Ignore
     def 'U2: User’s detail page will provide a way for the logged in user to follow the detail user'(){
         when:
         $("#searchTermText").value("John")
@@ -60,42 +59,44 @@ class userDetailFunctionalspec extends GebSpec {
 
         then:
         sleep(1000)
-        $("#pageHeader").text() == "Pres2's User Details"
+        $("#pageHeader").text() == "Pres2's User Details";
         // User name and email
-        $("#userName").text() == "Name: John Adams"
-        $("#userEmail").text() == "Email: John.Adams@whitehouse.gov"
-        $('#followCheck').displayed
+        $("#userName").text() == "Name: John Adams";
+        $("#userEmail").text() == "Email: John.Adams@whitehouse.gov";
+
+        // R4: test to see if the directive is present
+        $("#areFollowing").displayed;
+        $("#startfollow").displayed == false;
 
         when:
-        $('#followCheck').click()
-        sleep(1000)
+        $("#areFollowing").click();
+        sleep(1000);
         driver.switchTo().alert().accept() // click OK to message
 
         then:
-        sleep(1000)
-        $('#followCheck').displayed == false;
-        $('#areFollowing').displayed
+        sleep(1000);
+        $("#areFollowing").displayed == false;
+        $("#startfollow").displayed == true;
 
         //N1: User’s detail page
-        $("#tCurrentUser").text() == "George Washington"
+        $("#tCurrentUser").text() == "George Washington";
         //N2: Search box
-        $("#searchTermLabel").displayed
-        $("#searchTermText").displayed
-        $("#search").displayed
+        $("#searchTermLabel").displayed;
+        $("#searchTermText").displayed;
+        $("#search").displayed;
         // N3: Logout
-        $('#tLogout').displayed
+        $('#tLogout').displayed;
 
         when:
         //N3: Logout - clicking this should bring you to the login screen and provide a helpful message ‘Sorry to see you go… etc’
-        sleep(1000)
-        $("#tLogout").click()
+        sleep(1000);
+        $("#tLogout").click();
 
         then:
-        sleep(1000)
-        $("#logoutMsg").displayed
+        sleep(1000);
+        $("#logoutMsg").displayed;
     }
 
-    @Ignore
     def 'U3: When the logged in user is following the detail user, the detail page will display a message or icon indicating this'() {
         when:
         $("#searchTermText").value("I")
@@ -112,9 +113,11 @@ class userDetailFunctionalspec extends GebSpec {
         $("#userName").text() == "Name: Thomas Jefferson"
         $("#userEmail").text() == "Email: Thomas.Jefferson@whitehouse.gov"
 
-        $('#followCheck').displayed == false;
-        $('#areFollowing').displayed
-        $('#areFollowing').text() == "You are following this user"
+        $("#areFollowing").displayed == false;
+        $("#startfollow").displayed == true;
+
+        when:
+        $("#start")
 
         //N1: User’s detail page
         sleep(1000)
@@ -128,17 +131,15 @@ class userDetailFunctionalspec extends GebSpec {
         sleep(1000)
         $('#tLogout').displayed
 
-        when:
         //N3: Logout - clicking this should bring you to the login screen and provide a helpful message ‘Sorry to see you go… etc’
-        sleep(1000)
-        $("#tLogout").click()
+        sleep(1000);
+        $("#tLogout").click();
 
         then:
         sleep(1000)
         $("#logoutMsg").displayed
     }
 
-    @Ignore
     def 'U4: When the logged in user goes to their own detail page, they can edit their name and email'() {
         when:
         sleep(1000)
@@ -195,7 +196,6 @@ class userDetailFunctionalspec extends GebSpec {
         $("#userEdit").displayed
     }
 
-    @Ignore
     def 'Edit user has search, logged in user detail, and logout navigation'(){
         when:
         sleep(1000)
